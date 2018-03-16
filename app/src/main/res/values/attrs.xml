@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="CustomCalendarView">
-        <attr name="numberOfDaysToDisplay" format="String" />
-        <attr name="dateDisplayFormt" format="String" />
+        <attr name="fillUpAllDays" format="boolean" />
+        <attr name="dateDisplayFormt" >
+            <enum name="MMM yyyy" value="MMM yyyy" />
+            <enum name="dd MM yyyy" value="dd MM yyyy" />
+        </attr>
+        <attr name="showSeasonalColorsOnMonths" format="boolean" />
     </declare-styleable>
 </resources>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">CalendarProject</string>
+    <string name="date_holder">Current Date</string>
+    <string name="day_monday">MON</string>
+    <string name="day_sunday">SUN</string>
+    <string name="day_saturday">SAT</string>
+    <string name="day_friday">FRI</string>
+    <string name="day_thursday">THU</string>
+    <string name="day_wednesday">WED</string>
+    <string name="day_teusday">TUE</string>
+</resources>

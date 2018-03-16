@@ -12,6 +12,13 @@ import android.widget.LinearLayout;
  */
 
 public class CustomCalendarView extends LinearLayout {
+
+    private static final String TAG = CustomCalendarView.class.getSimpleName();
+
+    private static String numberOfDaysToDisplay = "prevMonthIncluded";
+    private static String dateDisplayFormat = "MMM YYYY";
+    
+
     public CustomCalendarView(Context context) {
         super(context);
     }
@@ -28,4 +35,5 @@ public class CustomCalendarView extends LinearLayout {
     public CustomCalendarView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
+
 }

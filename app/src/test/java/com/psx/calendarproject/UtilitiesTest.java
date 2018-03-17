@@ -17,4 +17,10 @@ public class UtilitiesTest {
         assertEquals (CalendarUtilities.isLeapYear(2000),true);
         assertEquals (CalendarUtilities.isLeapYear(1900),false);
     }
+
+    @Test
+    public void isIntegerMappingToDatePatternCorrect () {
+        assertEquals(CalendarUtilities.MAP_DATE_PATTERN_TO_INTEGER.get(1),"MMM, yyyy");
+        assertEquals(CalendarUtilities.MAP_DATE_PATTERN_TO_INTEGER.get(2),"dd/MM/yyyy");
+    }
 }

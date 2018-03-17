@@ -2,10 +2,12 @@
 <resources>
     <declare-styleable name="CustomCalendarView">
         <attr name="fillUpAllDays" format="boolean" />
-        <attr name="dateDisplayFormt" >
-            <enum name="MMM yyyy" value="MMM yyyy" />
-            <enum name="dd MM yyyy" value="dd MM yyyy" />
+        <attr name="dateDisplayFormt">
+            <enum name="month_year" value="1" />
+            <enum name="date_month_year" value="2" />
         </attr>
+        <attr name="nextMonthImage" format="integer" />
+        <attr name="prevMonthImage" format="integer" />
         <attr name="showSeasonalColorsOnMonths" format="boolean" />
     </declare-styleable>
 </resources>

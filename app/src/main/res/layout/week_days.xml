@@ -17,8 +17,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="17dp"
-            android:text="@string/day_monday" />
+            android:text="@string/day_monday"
+            android:textSize="@dimen/week_day_text_size"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/teusday"
@@ -26,8 +27,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="17dp"
-            android:text="@string/day_teusday" />
+            android:text="@string/day_teusday"
+            android:textSize="@dimen/week_day_text_size"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/wednesday"
@@ -35,8 +37,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="17dp"
-            android:text="@string/day_wednesday" />
+            android:text="@string/day_wednesday"
+            android:textSize="@dimen/week_day_text_size"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/thursday"
@@ -44,8 +47,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="17dp"
-            android:text="@string/day_thursday" />
+            android:text="@string/day_thursday"
+            android:textSize="@dimen/week_day_text_size"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/friday"
@@ -53,8 +57,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="17dp"
-            android:text="@string/day_friday" />
+            android:text="@string/day_friday"
+            android:textSize="@dimen/week_day_text_size"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/saturday"
@@ -62,8 +67,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="17dp"
-            android:text="@string/day_saturday" />
+            android:text="@string/day_saturday"
+            android:textSize="@dimen/week_day_text_size"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/sunday"
@@ -71,8 +77,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="17dp"
-            android:text="@string/day_sunday" />
+            android:text="@string/day_sunday"
+            android:textSize="@dimen/week_day_text_size"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

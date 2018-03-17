@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
     tools:context="com.psx.calendarproject.MainActivity">
 
 
     <com.psx.calendarproject.CustomCalendar.CustomCalendarView
-        android:layout_width="match_parent"
-        app:currDateColor="@color/colorPrimaryDark"
-        app:fillUpAllDays="true"
+        xmlns:CalendarNS="http://schemas.android.com/apk/res/com.psx.calendarproject.CustomCalendar"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:currDateColor="@color/colorAccent"
         app:dateDisplayFormt="month_year"
-        android:layout_height="match_parent" />
+        app:fillUpAllDays="true" />
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

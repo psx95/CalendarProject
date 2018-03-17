@@ -3,7 +3,6 @@ package com.psx.calendarproject.CustomCalendar;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -140,19 +139,13 @@ public class CustomCalendarView extends LinearLayout {
         ArrayList<Date> cells = new ArrayList<>();
         Calendar calendar = (Calendar) calendarToday.clone();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
+        // TODO : Use this to allow user to change the Beginning of week from sunday to monday
         int beginningMonthCell = calendar.get(Calendar.DAY_OF_WEEK) - 1;
         calendar.add(Calendar.DAY_OF_MONTH, -beginningMonthCell);
         while (cells.size() < numberOfDaysToShow) {
             cells.add(calendar.getTime());
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
-         /*else {
-            numberOfDaysToShow = CalendarUtilities.isLeapYear(calendar.get(Calendar.YEAR)) && (calendar.get(Calendar.MONTH) == Calendar.FEBRUARY) ? 29 : (int) CalendarUtilities.MAP_NUMBER_OF_DAYS_TO_MONTH.get(calendar.get(Calendar.MONTH));
-            while (cells.size() < numberOfDaysToShow) {
-                cells.add(calendar.getTime());
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
-            }
-        }*/
         calendarGrid.setAdapter(new CalendarAdapter(getContext(), cells, eventDates));
     }
 }

@@ -16,6 +16,21 @@ public class CalendarUtilities {
         put(2, "dd/MM/yyyy");
     }};
 
+    public static HashMap MAP_NUMBER_OF_DAYS_TO_MONTH = new HashMap<Integer,Integer> () {{
+        put(Calendar.JANUARY,31);
+        put(Calendar.FEBRUARY,29);
+        put(Calendar.MARCH,31);
+        put(Calendar.APRIL,30);
+        put(Calendar.MAY,31);
+        put(Calendar.JUNE,30);
+        put(Calendar.JULY,31);
+        put(Calendar.AUGUST,31);
+        put(Calendar.SEPTEMBER,30);
+        put(Calendar.OCTOBER,31);
+        put(Calendar.NOVEMBER,30);
+        put(Calendar.DECEMBER,31);
+    }};
+
     public static boolean isLeapYear (int year) {
         return  year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
     }
@@ -32,5 +47,15 @@ public class CalendarUtilities {
         if (calendar1.get(Calendar.YEAR) != calendar2.get(Calendar.YEAR))
             return false;
         return true;
+    }
+
+    public static boolean dateBelongsToCurrentMonthAndYear (Date date) {
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendarToday = (Calendar) calendar.clone();
+        calendar.setTime(date);
+        if (calendarToday.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && calendarToday.get(Calendar.YEAR) == calendar.get(Calendar.YEAR))
+            return true;
+        else
+            return false;
     }
 }

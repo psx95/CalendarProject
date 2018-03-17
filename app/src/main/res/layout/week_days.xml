@@ -12,6 +12,16 @@
         android:weightSum="7">
 
         <TextView
+            android:id="@+id/sunday"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/day_sunday"
+            android:textSize="@dimen/week_day_text_size"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/monday"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -71,15 +81,6 @@
             android:textSize="@dimen/week_day_text_size"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/sunday"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/day_sunday"
-            android:textSize="@dimen/week_day_text_size"
-            android:textStyle="bold" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

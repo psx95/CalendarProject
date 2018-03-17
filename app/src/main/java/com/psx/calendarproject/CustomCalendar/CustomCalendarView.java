@@ -3,7 +3,6 @@ package com.psx.calendarproject.CustomCalendar;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -34,10 +33,10 @@ public class CustomCalendarView extends LinearLayout {
 
     private static final String TAG = CustomCalendarView.class.getSimpleName();
     private Calendar calendarToday = Calendar.getInstance();
-    private int numberOfDaysToShow;
+    private int numberOfDaysToShow = 42;
 
     // attribute values
-    private boolean fillUpAllDays = true;
+    public static boolean fillUpAllDays = true;
     private String dateDisplayFormat = "MMM YYYY";
     private boolean showSeasonalColorsOnMonths = false;
     private int nextMonthImage, prevMonthImage;
@@ -47,12 +46,13 @@ public class CustomCalendarView extends LinearLayout {
     private LinearLayout calendarTopBar, weekDaysContainer, gridViewContainer;
     private ImageView imageViewNextMonth, imageViewPrevMonth;
     private TextView currentDate;
-    private View inflatedView;;
+    private View inflatedView;
+    ;
     private GridView calendarGrid;
 
     public CustomCalendarView(Context context) {
         super(context);
-        initView(context,null);
+        initView(context, null);
     }
 
     public CustomCalendarView(Context context, @Nullable AttributeSet attrs) {
@@ -62,7 +62,7 @@ public class CustomCalendarView extends LinearLayout {
 
     public CustomCalendarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initView(context,attrs);
+        initView(context, attrs);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -71,17 +71,17 @@ public class CustomCalendarView extends LinearLayout {
         initView(context, attrs);
     }
 
-    private void initView (Context context, @Nullable AttributeSet attributeSet) {
+    private void initView(Context context, @Nullable AttributeSet attributeSet) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (layoutInflater!=null) {
+        if (layoutInflater != null) {
             inflatedView = layoutInflater.inflate(R.layout.custom_calendar, this);
         } else {
-            Toast.makeText(context,"There seems to be some problem. Unable to inflate View.",Toast.LENGTH_LONG).show();
-            Log.e(TAG,"Cannot get a reference to Layout Inflater");
+            Toast.makeText(context, "There seems to be some problem. Unable to inflate View.", Toast.LENGTH_LONG).show();
+            Log.e(TAG, "Cannot get a reference to Layout Inflater");
             inflatedView = null;
         }
         findAllViews(inflatedView);
-        if (attributeSet!=null)
+        if (attributeSet != null)
             loadPreferencesFromAttributes(attributeSet);
         applyLoadedPreferences();
         setCurrentDate();
@@ -101,9 +101,9 @@ public class CustomCalendarView extends LinearLayout {
     private void loadPreferencesFromAttributes(AttributeSet attributeSet) {
         TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.CustomCalendarView);
         try {
-            fillUpAllDays = typedArray.getBoolean(R.styleable.CustomCalendarView_fillUpAllDays,true);
-            dateDisplayFormat = (String) CalendarUtilities.MAP_DATE_PATTERN_TO_INTEGER.get( Integer.parseInt(typedArray.getString(R.styleable.CustomCalendarView_dateDisplayFormt)));
-            showSeasonalColorsOnMonths = typedArray.getBoolean(R.styleable.CustomCalendarView_showSeasonalColorsOnMonths,false);
+            fillUpAllDays = typedArray.getBoolean(R.styleable.CustomCalendarView_fillUpAllDays, true);
+            dateDisplayFormat = (String) CalendarUtilities.MAP_DATE_PATTERN_TO_INTEGER.get(Integer.parseInt(typedArray.getString(R.styleable.CustomCalendarView_dateDisplayFormt)));
+            showSeasonalColorsOnMonths = typedArray.getBoolean(R.styleable.CustomCalendarView_showSeasonalColorsOnMonths, false);
             nextMonthImage = typedArray.getInt(R.styleable.CustomCalendarView_nextMonthImage, R.drawable.ic_arrow_right_black_30dp);
             prevMonthImage = typedArray.getInt(R.styleable.CustomCalendarView_prevMonthImage, R.drawable.ic_arrow_left_black_30dp);
             currDateColor = typedArray.getColorStateList(R.styleable.CustomCalendarView_currDateColor);
@@ -115,11 +115,11 @@ public class CustomCalendarView extends LinearLayout {
     private void applyLoadedPreferences() {
         changeMonthControlImages();
         changeCurrentDateColor(currDateColor);
-        changeNumberOfDaysToShow(fillUpAllDays);
+        //changeNumberOfDaysToShow(fillUpAllDays);
     }
 
     private void changeNumberOfDaysToShow(boolean fillUpAllDays) {
-        numberOfDaysToShow = fillUpAllDays ? 42:0;
+        numberOfDaysToShow = fillUpAllDays ? 42 : 0;
     }
 
     private void setCurrentDate() {
@@ -138,13 +138,14 @@ public class CustomCalendarView extends LinearLayout {
     private void fillCalendarGrid(HashSet<Date> eventDates) {
         ArrayList<Date> cells = new ArrayList<>();
         Calendar calendar = (Calendar) calendarToday.clone();
-        calendar.set(Calendar.DAY_OF_MONTH,1);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        // TODO : Use this to allow user to change the Beginning of week from sunday to monday
         int beginningMonthCell = calendar.get(Calendar.DAY_OF_WEEK) - 1;
         calendar.add(Calendar.DAY_OF_MONTH, -beginningMonthCell);
         while (cells.size() < numberOfDaysToShow) {
             cells.add(calendar.getTime());
-            calendar.add(Calendar.DAY_OF_MONTH,1);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
-        calendarGrid.setAdapter(new CalendarAdapter(getContext(),cells,eventDates));
+        calendarGrid.setAdapter(new CalendarAdapter(getContext(), cells, eventDates));
     }
 }

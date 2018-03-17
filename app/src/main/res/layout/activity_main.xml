@@ -17,6 +17,6 @@
         android:layout_height="wrap_content"
         app:currDateColor="@color/colorAccent"
         app:dateDisplayFormt="month_year"
-        app:fillUpAllDays="true" />
+        app:fillUpAllDays="false" />
 
 </LinearLayout>

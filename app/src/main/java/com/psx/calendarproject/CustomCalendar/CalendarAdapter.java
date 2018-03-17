@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import static android.graphics.Typeface.BOLD;
+import static android.view.View.GONE;
 
 /**
  * Created by Pranav Sharma on 17-03-2018.
@@ -62,8 +63,11 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Date date = getItem(position);
         Date today = Calendar.getInstance().getTime();
-        if (convertView == null)
+        TextView textViewDate = null;
+        if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.cutsom_calendar_day, parent, false);
+            textViewDate = convertView.findViewById(R.id.date_display);
+        }
         if (specialDateList != null) {
             for (Date d : specialDateList) {
                 if (CalendarUtilities.areDatesSame(d,date)) {
@@ -72,11 +76,26 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
                 }
             }
         }
-        if (CalendarUtilities.areDatesSame(date,today)) {
-            TextView textView = convertView.findViewById(R.id.date_display);
-            textView.setTextColor(convertView.getContext().getResources().getColor(R.color.colorPrimaryDark));
+        if (textViewDate!=null && CalendarUtilities.areDatesSame(date,today)) {
+            textViewDate.setTextColor(convertView.getContext().getResources().getColor(R.color.colorPrimaryDark));
         }
+        grayOutDateIfNotOfThisMonth (convertView, date);
+        Calendar calendarDate = Calendar.getInstance();
+        calendarDate.setTime(date);
+        if (textViewDate!=null)
+            textViewDate.setText(String.valueOf(calendarDate.get(Calendar.DATE)));
         return convertView;
+    }
+
+    private void grayOutDateIfNotOfThisMonth(View convertView, Date date) {
+        if (!CalendarUtilities.dateBelongsToCurrentMonthAndYear(date)) {
+            TextView textView_date = convertView.findViewById(R.id.date_display);
+            if (CustomCalendarView.fillUpAllDays) {
+                textView_date.setTextColor(getContext().getResources().getColor(R.color.greyed_out));
+            } else {
+                convertView.setVisibility(GONE);
+            }
+        }
     }
 
     private void addEffectsToDate(View convertView) {

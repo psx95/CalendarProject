@@ -9,5 +9,6 @@
         <attr name="nextMonthImage" format="integer" />
         <attr name="prevMonthImage" format="integer" />
         <attr name="showSeasonalColorsOnMonths" format="boolean" />
+        <attr name="currDateColor" format="reference" />
     </declare-styleable>
 </resources>

@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="400dp">
 
     <LinearLayout
         android:id="@+id/calendar_container"
@@ -82,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/gridViewContainer"
-            android:layout_weight="6">
+            android:layout_weight="8">
 
             <GridView
                 android:id="@+id/calendar_grid"

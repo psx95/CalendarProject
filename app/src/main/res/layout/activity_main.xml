@@ -9,7 +9,7 @@
     tools:context="com.psx.calendarproject.MainActivity">
 
 
-    <com.psx.calendarproject.CustomCalendar.CustomCalendarView
+    <!--<com.psx.calendarproject.CustomCalendar.CustomCalendarView
         xmlns:CalendarNS="http://schemas.android.com/apk/res/com.psx.calendarproject.CustomCalendar"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cal"
@@ -17,6 +17,12 @@
         android:layout_height="wrap_content"
         app:currDateColor="@color/colorAccent"
         app:dateDisplayFormt="month_year"
-        app:fillUpAllDays="false" />
+        app:fillUpAllDays="false" />-->
+
+    <com.psx.calendarproject.CustomCalendar.FlipperCalendar
+        android:id="@+id/flip_cal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
 </LinearLayout>

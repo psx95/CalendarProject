@@ -37,7 +37,7 @@ public class CustomCalendarView extends LinearLayout {
 
     // attribute values
     public static boolean fillUpAllDays = true;
-    private String dateDisplayFormat = "MMM YYYY";
+    private String dateDisplayFormat = "MMM yyyy";
     private boolean showSeasonalColorsOnMonths = false;
     private int nextMonthImage, prevMonthImage;
     private ColorStateList currDateColor;
@@ -81,9 +81,10 @@ public class CustomCalendarView extends LinearLayout {
             inflatedView = null;
         }
         findAllViews(inflatedView);
-        if (attributeSet != null)
+        if (attributeSet != null) {
             loadPreferencesFromAttributes(attributeSet);
-        applyLoadedPreferences();
+            applyLoadedPreferences();
+        }
         setCurrentDate();
         fillCalendarGrid(null);
     }

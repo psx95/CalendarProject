@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 
+import static com.psx.calendarproject.CustomCalendar.CalendarUtilities.generateCellsForCalendarGrid;
+
 /**
  * Created by Pranav Sharma on 17-03-2018.
  */
@@ -34,6 +36,8 @@ public class CustomCalendarView extends LinearLayout {
     private static final String TAG = CustomCalendarView.class.getSimpleName();
     private Calendar calendarToday = Calendar.getInstance();
     private int numberOfDaysToShow = 42;
+    private HashSet<Date> eventDates = new HashSet<>();
+    private Date currentDateTop;
 
     // attribute values
     public static boolean fillUpAllDays = true;
@@ -47,7 +51,7 @@ public class CustomCalendarView extends LinearLayout {
     private ImageView imageViewNextMonth, imageViewPrevMonth;
     private TextView currentDate;
     private View inflatedView;
-    ;
+
     private GridView calendarGrid;
 
     public CustomCalendarView(Context context) {
@@ -85,8 +89,9 @@ public class CustomCalendarView extends LinearLayout {
             loadPreferencesFromAttributes(attributeSet);
             applyLoadedPreferences();
         }
-        setCurrentDate();
-        fillCalendarGrid(null);
+        currentDateTop = calendarToday.getTime();
+        setCurrentDate(currentDateTop);
+        fillCalendarGrid();
     }
 
     private void findAllViews(View view) {
@@ -123,8 +128,8 @@ public class CustomCalendarView extends LinearLayout {
         numberOfDaysToShow = fillUpAllDays ? 42 : 0;
     }
 
-    private void setCurrentDate() {
-        currentDate.setText(new SimpleDateFormat(dateDisplayFormat, Locale.getDefault()).format(calendarToday.getTime()));
+    public void setCurrentDate(Date currentDateTop) {
+        currentDate.setText(new SimpleDateFormat(dateDisplayFormat, Locale.getDefault()).format(currentDateTop));
     }
 
     private void changeCurrentDateColor(ColorStateList color) {
@@ -136,17 +141,29 @@ public class CustomCalendarView extends LinearLayout {
         imageViewPrevMonth.setImageDrawable(getContext().getResources().getDrawable(prevMonthImage));
     }
 
-    private void fillCalendarGrid(HashSet<Date> eventDates) {
-        ArrayList<Date> cells = new ArrayList<>();
-        Calendar calendar = (Calendar) calendarToday.clone();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        // TODO : Use this to allow user to change the Beginning of week from sunday to monday
-        int beginningMonthCell = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        calendar.add(Calendar.DAY_OF_MONTH, -beginningMonthCell);
-        while (cells.size() < numberOfDaysToShow) {
-            cells.add(calendar.getTime());
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-        }
-        calendarGrid.setAdapter(new CalendarAdapter(getContext(), cells, eventDates));
+    private void fillCalendarGrid() {
+        ArrayList<Date> cells = generateCellsForCalendarGrid((Calendar) calendarToday.clone(),numberOfDaysToShow);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), cells, eventDates);
+        setCalendarGridAdapter(calendarAdapter);
+    }
+
+    public void setCalendarGridAdapter (CalendarAdapter calendarGridAdapter) {
+        calendarGrid.setAdapter(calendarGridAdapter);
+    }
+
+    public Calendar getCurrentCalendarMonthAndYear() {
+        return calendarToday;
+    }
+
+    public void setCurrentCalendarMonthAndYear (Calendar calendar) {
+        calendarToday = calendar;
+    }
+
+    public Date getCurrentDateTop() {
+        return currentDateTop;
+    }
+
+    public void setCurrentDateTop(Date currentDateTop) {
+        this.currentDateTop = currentDateTop;
     }
 }

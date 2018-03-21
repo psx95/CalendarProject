@@ -6,17 +6,20 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterViewFlipper;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.psx.calendarproject.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
 
 /**
  * Created by Pranav Sharma on 18-03-2018.
@@ -30,25 +33,30 @@ public class FlipperCalendar extends LinearLayout {
     private View inflatedView;
     private AdapterViewFlipper adapterViewFlipper;
     private GestureDetectorCompat gestureDetectorCompat;
+    Calendar currentMonthCalendarInstance, previousMonthCalendarInstance, nextMonthCalendarInstance;
 
     public FlipperCalendar(Context context) {
         super(context);
+        initCalendarInstances();
         initView(context,null);
     }
 
     public FlipperCalendar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        initCalendarInstances();
         initView(context,null);
     }
 
     public FlipperCalendar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initCalendarInstances();
         initView(context,null);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public FlipperCalendar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        initCalendarInstances();
         initView(context,null);
     }
 
@@ -70,12 +78,36 @@ public class FlipperCalendar extends LinearLayout {
         });
     }
 
+
+    private void initCalendarInstances() {
+        currentMonthCalendarInstance = Calendar.getInstance();
+        previousMonthCalendarInstance = (Calendar)currentMonthCalendarInstance.clone();
+        previousMonthCalendarInstance.add(Calendar.MONTH,-1);
+        nextMonthCalendarInstance = (Calendar)currentMonthCalendarInstance.clone();
+        nextMonthCalendarInstance.add(Calendar.MONTH,1);
+    }
+
     private ArrayList<CustomCalendarView> prepareArrayListOfCalendars() {
         ArrayList<CustomCalendarView>  customCalendarViews = new ArrayList<>();
-        customCalendarViews.add(new CustomCalendarView(getContext()));
-        customCalendarViews.add(new CustomCalendarView(getContext()));
-        customCalendarViews.add(new CustomCalendarView(getContext()));
+        CustomCalendarView currentMonth = new CustomCalendarView(getContext());
+        currentMonth = prepareMonth(currentMonth, currentMonthCalendarInstance);
+        CustomCalendarView previousMonth = new CustomCalendarView(getContext());
+        previousMonth = prepareMonth(previousMonth, previousMonthCalendarInstance);
+        CustomCalendarView nextMonth = new CustomCalendarView(getContext());
+        nextMonth = prepareMonth(nextMonth, nextMonthCalendarInstance);
+        customCalendarViews.add(previousMonth);
+        customCalendarViews.add(currentMonth);
+        customCalendarViews.add(nextMonth);
+
         return customCalendarViews;
+    }
+
+    private CustomCalendarView prepareMonth(CustomCalendarView currentMonth,Calendar currentMonthCalendar) {
+        CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(),CalendarUtilities.generateCellsForCalendarGrid(currentMonthCalendar,42),new HashSet<Date>());
+        currentMonth.setCurrentCalendarMonthAndYear(currentMonthCalendar);
+        currentMonth.setCurrentDate(currentMonthCalendar.getTime());
+        currentMonth.setCalendarGridAdapter(calendarAdapter);
+        return currentMonth;
     }
 
     class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {
@@ -94,6 +126,7 @@ public class FlipperCalendar extends LinearLayout {
                     adapterViewFlipper.showPrevious();
                     return true;
                 }
+                Toast.makeText(adapterViewFlipper.getContext()," Position "+adapterViewFlipper.indexOfChild(adapterViewFlipper.getCurrentView()),Toast.LENGTH_SHORT).show();
 
             } catch (Exception e) {
                 e.printStackTrace();

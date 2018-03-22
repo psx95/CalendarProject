@@ -1,5 +1,6 @@
 package com.psx.calendarproject.CustomCalendar;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,5 +58,18 @@ public class CalendarUtilities {
             return true;
         else
             return false;
+    }
+
+    public static ArrayList<Date> generateCellsForCalendarGrid (Calendar calendar, int numberOfDaysToShow) {
+        ArrayList<Date> cells = new ArrayList<>();
+        calendar.set(Calendar.DAY_OF_MONTH,1);
+        // TODO : Use this to allow user to change the Beginning of week from sunday to monday
+        int beginningMonthCell = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        calendar.add(Calendar.DAY_OF_MONTH, -beginningMonthCell);
+        while (cells.size() < numberOfDaysToShow) {
+            cells.add(calendar.getTime());
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        return cells;
     }
 }

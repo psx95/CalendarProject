@@ -9,4 +9,6 @@ import java.util.Date;
 public interface UserInputEventsHandler {
     void onDateLongPress(Date date);
     void onDatePress (Date date);
+    void onMonthForward ();
+    void onMonthBackward ();
 }

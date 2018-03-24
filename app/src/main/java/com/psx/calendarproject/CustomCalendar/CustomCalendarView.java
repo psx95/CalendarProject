@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ import static com.psx.calendarproject.CustomCalendar.CalendarUtilities.generateC
  * While generating dates, the month often shifts to the next one
  */
 
-public class CustomCalendarView extends LinearLayout {
+public class CustomCalendarView extends LinearLayout implements View.OnClickListener {
 
     private static final String TAG = CustomCalendarView.class.getSimpleName();
     private Calendar calendarToday = Calendar.getInstance();
@@ -51,9 +52,10 @@ public class CustomCalendarView extends LinearLayout {
 
     //fields in the custom View
     private LinearLayout calendarTopBar, weekDaysContainer, gridViewContainer;
-    private ImageView imageViewNextMonth, imageViewPrevMonth;
+    private ImageButton imageViewNextMonth, imageViewPrevMonth;
     private TextView currentDate;
     private View inflatedView;
+    private static UserInputCallback callbackListener;
 
     private GridView calendarGrid;
 
@@ -95,7 +97,9 @@ public class CustomCalendarView extends LinearLayout {
         weekDaysContainer = view.findViewById(R.id.week_days_container);
         gridViewContainer = view.findViewById(R.id.gridViewContainer);
         imageViewNextMonth = view.findViewById(R.id.image_next_month);
+        imageViewNextMonth.setOnClickListener(this);
         imageViewPrevMonth = view.findViewById(R.id.image_prev_month);
+        imageViewPrevMonth.setOnClickListener(this);
         currentDate = view.findViewById(R.id.text_curr_date);
         calendarGrid = view.findViewById(R.id.calendar_grid);
     }
@@ -163,5 +167,24 @@ public class CustomCalendarView extends LinearLayout {
 
     public void setCurrentDateTop(Date currentDateTop) {
         this.currentDateTop = currentDateTop;
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.image_next_month:
+                callbackListener.onMonthForward();
+                break;
+            case R.id.image_prev_month:
+                callbackListener.onMonthBackward();
+                break;
+            default:
+                Log.e(TAG,"View with id "+id +" Not found.");
+        }
+    }
+
+    public static void setCallbackListener(UserInputCallback callbackListener) {
+        CustomCalendarView.callbackListener = callbackListener;
     }
 }

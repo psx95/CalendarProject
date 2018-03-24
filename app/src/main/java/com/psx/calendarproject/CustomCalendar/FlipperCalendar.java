@@ -25,7 +25,7 @@ import java.util.HashSet;
 /**
  * Created by Pranav Sharma on 18-03-2018.
  */
-
+//TODO : Setup callback listeners
 public class FlipperCalendar extends LinearLayout {
 
     private static final String TAG = FlipperCalendar.class.getSimpleName();
@@ -36,6 +36,7 @@ public class FlipperCalendar extends LinearLayout {
     private AdapterViewFlipper adapterViewFlipper;
     private GestureDetectorCompat gestureDetectorCompat;
     Calendar currentMonthCalendarInstance, previousMonthCalendarInstance, nextMonthCalendarInstance;
+    private static UserInputCallback callbackListener;
 
     public FlipperCalendar(Context context) {
         super(context);
@@ -49,6 +50,7 @@ public class FlipperCalendar extends LinearLayout {
         Log.d(TAG, "multi param constructor");
         initCalendarInstances();
         initView(context, attrs);
+        setupCallbackListeners();
     }
 
     public FlipperCalendar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -105,6 +107,20 @@ public class FlipperCalendar extends LinearLayout {
         customCalendarViews.add(currentMonth);
         customCalendarViews.add(nextMonth);
         return customCalendarViews;
+    }
+    
+    private void setupCallbackListeners() {
+        CustomCalendarView.setCallbackListener(new UserInputCallback() {
+            @Override
+            public void onMonthForward() {
+                adapterViewFlipper.showNext();
+            }
+
+            @Override
+            public void onMonthBackward() {
+                adapterViewFlipper.showPrevious();
+            }
+        });
     }
 
     class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {

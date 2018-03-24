@@ -64,6 +64,12 @@ public class CustomCalendarView extends LinearLayout {
         initView(context, attrs);
     }
 
+    public CustomCalendarView (Context context, AttributeSet attributeSet, Calendar calendar) {
+        this (context,attributeSet);
+        this.calendarToday = calendar;
+        initView(context,attributeSet);
+    }
+
     public CustomCalendarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initView(context, attrs);
@@ -122,7 +128,6 @@ public class CustomCalendarView extends LinearLayout {
     private void applyLoadedPreferences() {
         changeMonthControlImages();
         changeCurrentDateColor(currDateColor);
-        //changeNumberOfDaysToShow(fillUpAllDays);
     }
 
     private void changeNumberOfDaysToShow(boolean fillUpAllDays) {
@@ -130,6 +135,7 @@ public class CustomCalendarView extends LinearLayout {
     }
 
     public void setCurrentDate(Date currentDateTop) {
+        setCurrentDateTop(currentDateTop);
         currentDate.setText(new SimpleDateFormat(dateDisplayFormat, Locale.getDefault()).format(currentDateTop));
     }
 
@@ -150,14 +156,6 @@ public class CustomCalendarView extends LinearLayout {
 
     public void setCalendarGridAdapter (CalendarAdapter calendarGridAdapter) {
         calendarGrid.setAdapter(calendarGridAdapter);
-    }
-
-    public Calendar getCurrentCalendarMonthAndYear() {
-        return calendarToday;
-    }
-
-    public void setCurrentCalendarMonthAndYear (Calendar calendar) {
-        calendarToday = calendar;
     }
 
     public Date getCurrentDateTop() {

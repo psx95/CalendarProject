@@ -92,27 +92,16 @@ public class FlipperCalendar extends LinearLayout {
 
     private ArrayList<CustomCalendarView> prepareArrayListOfCalendars(AttributeSet attributeSet) {
         ArrayList<CustomCalendarView>  customCalendarViews = new ArrayList<>();
-        CustomCalendarView currentMonth = new CustomCalendarView(getContext(),attributeSet);
+        CustomCalendarView currentMonth = new CustomCalendarView(getContext(),attributeSet, currentMonthCalendarInstance);
         Log.d(TAG, " Preparing current month instance. Month sent is "+ currentMonthCalendarInstance.get(Calendar.MONTH));
-        currentMonth = prepareMonth(currentMonth, currentMonthCalendarInstance);
-        CustomCalendarView previousMonth = new CustomCalendarView(getContext(),attributeSet);
+        CustomCalendarView previousMonth = new CustomCalendarView(getContext(),attributeSet, previousMonthCalendarInstance);
         Log.d(TAG," Preparing previous motnh instance. Month sent is "+previousMonthCalendarInstance.get(Calendar.MONTH));
-        previousMonth = prepareMonth(previousMonth, previousMonthCalendarInstance);
-        CustomCalendarView nextMonth = new CustomCalendarView(getContext(),attributeSet);
+        CustomCalendarView nextMonth = new CustomCalendarView(getContext(),attributeSet, nextMonthCalendarInstance);
         Log.d(TAG, " Preparing next Month instance. Month sent is "+nextMonthCalendarInstance.get(Calendar.MONTH));
-        nextMonth = prepareMonth(nextMonth, nextMonthCalendarInstance);
         customCalendarViews.add(previousMonth);
         customCalendarViews.add(currentMonth);
         customCalendarViews.add(nextMonth);
         return customCalendarViews;
-    }
-
-    private CustomCalendarView prepareMonth(CustomCalendarView currentMonth,Calendar currentMonthCalendar) {
-        currentMonth.setCurrentDate(currentMonthCalendar.getTime());
-        CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(),CalendarUtilities.generateCellsForCalendarGrid(currentMonthCalendar,42),new HashSet<Date>());
-        currentMonth.setCurrentCalendarMonthAndYear(currentMonthCalendar);
-        currentMonth.setCalendarGridAdapter(calendarAdapter);
-        return currentMonth;
     }
 
     class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {

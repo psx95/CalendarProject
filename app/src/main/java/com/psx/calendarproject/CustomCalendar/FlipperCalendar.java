@@ -39,42 +39,42 @@ public class FlipperCalendar extends LinearLayout {
 
     public FlipperCalendar(Context context) {
         super(context);
-        Log.d(TAG,"SIngle param constructor");
+        Log.d(TAG, "SIngle param constructor");
         initCalendarInstances();
-        initView(context,null);
+        initView(context, null);
     }
 
     public FlipperCalendar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        Log.d(TAG,"multi param constructor");
+        Log.d(TAG, "multi param constructor");
         initCalendarInstances();
-        initView(context,attrs);
+        initView(context, attrs);
     }
 
     public FlipperCalendar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        Log.d(TAG,"multi 3 param constructor");
+        Log.d(TAG, "multi 3 param constructor");
         initCalendarInstances();
-        initView(context,attrs);
+        initView(context, attrs);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public FlipperCalendar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        Log.d(TAG,"multi 4 param constructor");
+        Log.d(TAG, "multi 4 param constructor");
         initCalendarInstances();
-        initView(context,attrs);
+        initView(context, attrs);
     }
 
-    public void initView (Context context, @Nullable AttributeSet attributeSet) {
+    public void initView(Context context, @Nullable AttributeSet attributeSet) {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if (layoutInflater!=null)
+        if (layoutInflater != null)
             inflatedView = layoutInflater.inflate(R.layout.flipper_calendar, this);
         adapterViewFlipper = inflatedView.findViewById(R.id.calendarFlipper);
         ArrayList<CustomCalendarView> customCalendarViews = prepareArrayListOfCalendars(attributeSet);
         CalendarFlipAdapter calendarFlipAdapter = new CalendarFlipAdapter(context, customCalendarViews);
         adapterViewFlipper.setAdapter(calendarFlipAdapter);
-        gestureDetectorCompat = new GestureDetectorCompat(context,new SwipeGestureDetector());
+        gestureDetectorCompat = new GestureDetectorCompat(context, new SwipeGestureDetector());
         adapterViewFlipper.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -84,24 +84,23 @@ public class FlipperCalendar extends LinearLayout {
         });
     }
 
-
     private void initCalendarInstances() {
         currentMonthCalendarInstance = Calendar.getInstance();
-        previousMonthCalendarInstance = (Calendar)currentMonthCalendarInstance.clone();
-        previousMonthCalendarInstance.add(Calendar.MONTH,-1);
-        nextMonthCalendarInstance = (Calendar)currentMonthCalendarInstance.clone();
-        nextMonthCalendarInstance.add(Calendar.MONTH,1);
-        Log.d(TAG," Month instances prepared are previous month "+ previousMonthCalendarInstance.get(Calendar.MONTH)+ " Current Month "+ currentMonthCalendarInstance.get(Calendar.MONTH)+ " Next Month "+ nextMonthCalendarInstance.get(Calendar.MONTH));
+        previousMonthCalendarInstance = (Calendar) currentMonthCalendarInstance.clone();
+        previousMonthCalendarInstance.add(Calendar.MONTH, -1);
+        nextMonthCalendarInstance = (Calendar) currentMonthCalendarInstance.clone();
+        nextMonthCalendarInstance.add(Calendar.MONTH, 1);
+        Log.d(TAG, " Month instances prepared are previous month " + previousMonthCalendarInstance.get(Calendar.MONTH) + " Current Month " + currentMonthCalendarInstance.get(Calendar.MONTH) + " Next Month " + nextMonthCalendarInstance.get(Calendar.MONTH));
     }
 
     private ArrayList<CustomCalendarView> prepareArrayListOfCalendars(AttributeSet attributeSet) {
-        ArrayList<CustomCalendarView>  customCalendarViews = new ArrayList<>();
-        Log.d(TAG, " Preparing current month instance. Month sent is "+ currentMonthCalendarInstance.get(Calendar.MONTH));
-        CustomCalendarView currentMonth = new CustomCalendarView(getContext(),attributeSet, currentMonthCalendarInstance);
-        Log.d(TAG," Preparing previous motnh instance. Month sent is "+previousMonthCalendarInstance.get(Calendar.MONTH));
-        CustomCalendarView previousMonth = new CustomCalendarView(getContext(),attributeSet, previousMonthCalendarInstance);
-        Log.d(TAG, " Preparing next Month instance. Month sent is "+nextMonthCalendarInstance.get(Calendar.MONTH));
-        CustomCalendarView nextMonth = new CustomCalendarView(getContext(),attributeSet, nextMonthCalendarInstance);
+        ArrayList<CustomCalendarView> customCalendarViews = new ArrayList<>();
+        Log.d(TAG, " Preparing current month instance. Month sent is " + currentMonthCalendarInstance.get(Calendar.MONTH));
+        CustomCalendarView currentMonth = new CustomCalendarView(getContext(), attributeSet, currentMonthCalendarInstance);
+        Log.d(TAG, " Preparing previous motnh instance. Month sent is " + previousMonthCalendarInstance.get(Calendar.MONTH));
+        CustomCalendarView previousMonth = new CustomCalendarView(getContext(), attributeSet, previousMonthCalendarInstance);
+        Log.d(TAG, " Preparing next Month instance. Month sent is " + nextMonthCalendarInstance.get(Calendar.MONTH));
+        CustomCalendarView nextMonth = new CustomCalendarView(getContext(), attributeSet, nextMonthCalendarInstance);
         customCalendarViews.add(previousMonth);
         customCalendarViews.add(currentMonth);
         customCalendarViews.add(nextMonth);
@@ -114,17 +113,17 @@ public class FlipperCalendar extends LinearLayout {
             try {
                 // right to left swipe
                 if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    adapterViewFlipper.setInAnimation(getContext(),R.animator.left_in);
+                    adapterViewFlipper.setInAnimation(getContext(), R.animator.left_in);
                     adapterViewFlipper.setOutAnimation(getContext(), R.animator.left_out);
                     adapterViewFlipper.showNext();
                     return true;
                 } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
                     adapterViewFlipper.setInAnimation(getContext(), R.animator.right_in);
-                    adapterViewFlipper.setOutAnimation(getContext(),R.animator.right_out);
+                    adapterViewFlipper.setOutAnimation(getContext(), R.animator.right_out);
                     adapterViewFlipper.showPrevious();
                     return true;
                 }
-                Toast.makeText(adapterViewFlipper.getContext()," Position "+adapterViewFlipper.indexOfChild(adapterViewFlipper.getCurrentView()),Toast.LENGTH_SHORT).show();
+                Toast.makeText(adapterViewFlipper.getContext(), " Position " + adapterViewFlipper.indexOfChild(adapterViewFlipper.getCurrentView()), Toast.LENGTH_SHORT).show();
 
             } catch (Exception e) {
                 e.printStackTrace();

@@ -3,12 +3,11 @@ package com.psx.calendarproject.CustomCalendar;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.os.Build;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -48,6 +47,7 @@ public class CustomCalendarView extends LinearLayout {
     private boolean showSeasonalColorsOnMonths = false;
     private int nextMonthImage, prevMonthImage;
     private ColorStateList currDateColor;
+    private boolean scrollEnabled = false;
 
     //fields in the custom View
     private LinearLayout calendarTopBar, weekDaysContainer, gridViewContainer;
@@ -56,11 +56,6 @@ public class CustomCalendarView extends LinearLayout {
     private View inflatedView;
 
     private GridView calendarGrid;
-
-    private CustomCalendarView(Context context) {
-        super(context);
-        initView(context, null,calendarToday);
-    }
 
     private CustomCalendarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -72,17 +67,6 @@ public class CustomCalendarView extends LinearLayout {
         this.calendarToday = (Calendar) calendar.clone();
         Log.d("CALENDARVIEW", "Calendar set is "+this.calendarToday.get(Calendar.MONTH)+"/"+this.calendarToday.get(Calendar.YEAR));
         initView(context,attributeSet,calendar);
-    }
-
-    private CustomCalendarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initView(context, attrs, calendarToday);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private CustomCalendarView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        initView(context, attrs, calendarToday);
     }
 
     private void initView(Context context, @Nullable AttributeSet attributeSet, Calendar calendar) {
@@ -120,11 +104,12 @@ public class CustomCalendarView extends LinearLayout {
         TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.FlipperCalendar);
         try {
             fillUpAllDays = typedArray.getBoolean(R.styleable.FlipperCalendar_fillUpAllDays, true);
-            dateDisplayFormat = (String) CalendarUtilities.MAP_DATE_PATTERN_TO_INTEGER.get(Integer.parseInt(typedArray.getString(R.styleable.FlipperCalendar_dateDisplayFormt)));
+            dateDisplayFormat = (String) CalendarUtilities.MAP_DATE_PATTERN_TO_INTEGER.get(Integer.parseInt(typedArray.getString(R.styleable.FlipperCalendar_dateDisplayFormat)));
             showSeasonalColorsOnMonths = typedArray.getBoolean(R.styleable.FlipperCalendar_showSeasonalColorsOnMonths, false);
             nextMonthImage = typedArray.getInt(R.styleable.FlipperCalendar_nextMonthImage, R.drawable.ic_arrow_right_black_30dp);
             prevMonthImage = typedArray.getInt(R.styleable.FlipperCalendar_prevMonthImage, R.drawable.ic_arrow_left_black_30dp);
             currDateColor = typedArray.getColorStateList(R.styleable.FlipperCalendar_currDateColor);
+            scrollEnabled = typedArray.getBoolean(R.styleable.FlipperCalendar_scrollEnabled,false);
         } finally {
             typedArray.recycle();
         }
@@ -133,10 +118,18 @@ public class CustomCalendarView extends LinearLayout {
     private void applyLoadedPreferences() {
         changeMonthControlImages();
         changeCurrentDateColor(currDateColor);
+        changeScrollMode(scrollEnabled);
     }
 
-    private void changeNumberOfDaysToShow(boolean fillUpAllDays) {
-        numberOfDaysToShow = fillUpAllDays ? 42 : 0;
+    private void changeScrollMode(boolean scrollEnabled) {
+        if (!scrollEnabled) {
+            calendarGrid.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return event.getAction() == MotionEvent.ACTION_MOVE;
+                }
+            });
+        }
     }
 
     public void setCurrentDate(Date currentDateTop) {

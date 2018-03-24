@@ -2,7 +2,7 @@
 <resources>
     <declare-styleable name="FlipperCalendar">
         <attr name="fillUpAllDays" format="boolean" />
-        <attr name="dateDisplayFormt">
+        <attr name="dateDisplayFormat">
             <enum name="month_year" value="1" />
             <enum name="date_month_year" value="2" />
         </attr>
@@ -10,5 +10,6 @@
         <attr name="prevMonthImage" format="integer" />
         <attr name="showSeasonalColorsOnMonths" format="boolean" />
         <attr name="currDateColor" format="reference" />
+        <attr name="scrollEnabled" format="boolean" />
     </declare-styleable>
 </resources>

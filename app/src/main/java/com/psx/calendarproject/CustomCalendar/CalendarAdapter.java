@@ -67,7 +67,6 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Date date = getItem(position);
         // used for highlighting the current date
-        Log.d("CURRENT DATE", " Date is "+date);
         Date today = Calendar.getInstance().getTime();
         TextView textViewDate = null;
         if (convertView == null) {
@@ -88,9 +87,6 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
         }
         Calendar calendarDate = (Calendar) calendar.clone();
         calendarDate.setTime(date);
-        Log.d("CURRENT DATE", " Date after converting to calendar "+calendarDate.get(Calendar.DATE) +"/"
-        +calendarDate.get(Calendar.MONTH)+"/"+ calendarDate.get(Calendar.YEAR));
-        Log.d("CURRENT MONTH", calendar.get(Calendar.MONTH) +" is the month");
         grayOutDateIfNotOfThisMonth (convertView, date, calendar);
         if (textViewDate!=null)
             textViewDate.setText(String.valueOf(calendarDate.get(Calendar.DATE)));
@@ -100,8 +96,6 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
     private void grayOutDateIfNotOfThisMonth(View convertView, Date date, Calendar calendar) {
         Calendar calendar1 = (Calendar) calendar.clone();
         calendar1.setTime(date);
-        Log.d("GRAYOUT","compared Date "+calendar.get(Calendar.MONTH) + "/"+ calendar.get(Calendar.YEAR)
-                + " & " +calendar1.get(Calendar.MONTH)+"/"+calendar1.get(Calendar.YEAR));
         if (!CalendarUtilities.dateBelongsToCurrentMonthAndYear(date,calendar)) {
             TextView textView_date = convertView.findViewById(R.id.date_display);
             if (CustomCalendarView.fillUpAllDays) {

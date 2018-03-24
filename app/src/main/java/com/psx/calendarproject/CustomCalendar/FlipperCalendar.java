@@ -89,6 +89,7 @@ public class FlipperCalendar extends LinearLayout {
         ArrayList<CustomCalendarView> customCalendarViews = prepareArrayListOfCalendars(attributeSet);
         calendarFlipAdapter = new CalendarFlipAdapter(context, customCalendarViews);
         adapterViewFlipper.setAdapter(calendarFlipAdapter);
+        adapterViewFlipper.setDisplayedChild(1);
         gestureDetectorCompat = new GestureDetectorCompat(context, new SwipeGestureDetector());
         extractPreferencesForFlipperCalendar(attributeSet);
         adapterViewFlipper.setOnTouchListener(new OnTouchListener() {
@@ -122,16 +123,12 @@ public class FlipperCalendar extends LinearLayout {
         previousMonthCalendarInstance.add(Calendar.MONTH, -1);
         nextMonthCalendarInstance = (Calendar) currentMonthCalendarInstance.clone();
         nextMonthCalendarInstance.add(Calendar.MONTH, 1);
-        Log.d(TAG, " Month instances prepared are previous month " + previousMonthCalendarInstance.get(Calendar.MONTH) + " Current Month " + currentMonthCalendarInstance.get(Calendar.MONTH) + " Next Month " + nextMonthCalendarInstance.get(Calendar.MONTH));
     }
 
     private ArrayList<CustomCalendarView> prepareArrayListOfCalendars(AttributeSet attributeSet) {
         ArrayList<CustomCalendarView> customCalendarViews = new ArrayList<>();
-        Log.d(TAG, " Preparing current month instance. Month sent is " + currentMonthCalendarInstance.get(Calendar.MONTH));
         CustomCalendarView currentMonth = new CustomCalendarView(getContext(), attributeSet, currentMonthCalendarInstance);
-        Log.d(TAG, " Preparing previous motnh instance. Month sent is " + previousMonthCalendarInstance.get(Calendar.MONTH));
         CustomCalendarView previousMonth = new CustomCalendarView(getContext(), attributeSet, previousMonthCalendarInstance);
-        Log.d(TAG, " Preparing next Month instance. Month sent is " + nextMonthCalendarInstance.get(Calendar.MONTH));
         CustomCalendarView nextMonth = new CustomCalendarView(getContext(), attributeSet, nextMonthCalendarInstance);
         customCalendarViews.add(previousMonth);
         customCalendarViews.add(currentMonth);

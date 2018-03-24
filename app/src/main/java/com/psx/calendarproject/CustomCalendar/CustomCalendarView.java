@@ -152,7 +152,6 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
 
     private void fillCalendarGrid(Calendar calendar) {
         ArrayList<Date> cells = generateCellsForCalendarGrid(this.calendarToday, numberOfDaysToShow);
-        Log.d("CALANDER-ADAPTER","Sending calendar to adapter "+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
         CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), cells, eventDates, calendar);
         setCalendarGridAdapter(calendarAdapter);
     }

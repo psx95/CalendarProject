@@ -57,11 +57,6 @@ public class CustomCalendarView extends LinearLayout {
 
     private GridView calendarGrid;
 
-    private CustomCalendarView(Context context) {
-        super(context);
-        initView(context, null,calendarToday);
-    }
-
     private CustomCalendarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
@@ -72,17 +67,6 @@ public class CustomCalendarView extends LinearLayout {
         this.calendarToday = (Calendar) calendar.clone();
         Log.d("CALENDARVIEW", "Calendar set is "+this.calendarToday.get(Calendar.MONTH)+"/"+this.calendarToday.get(Calendar.YEAR));
         initView(context,attributeSet,calendar);
-    }
-
-    private CustomCalendarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initView(context, attrs, calendarToday);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private CustomCalendarView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        initView(context, attrs, calendarToday);
     }
 
     private void initView(Context context, @Nullable AttributeSet attributeSet, Calendar calendar) {
@@ -120,7 +104,7 @@ public class CustomCalendarView extends LinearLayout {
         TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.FlipperCalendar);
         try {
             fillUpAllDays = typedArray.getBoolean(R.styleable.FlipperCalendar_fillUpAllDays, true);
-            dateDisplayFormat = (String) CalendarUtilities.MAP_DATE_PATTERN_TO_INTEGER.get(Integer.parseInt(typedArray.getString(R.styleable.FlipperCalendar_dateDisplayFormt)));
+            dateDisplayFormat = (String) CalendarUtilities.MAP_DATE_PATTERN_TO_INTEGER.get(Integer.parseInt(typedArray.getString(R.styleable.FlipperCalendar_dateDisplayFormat)));
             showSeasonalColorsOnMonths = typedArray.getBoolean(R.styleable.FlipperCalendar_showSeasonalColorsOnMonths, false);
             nextMonthImage = typedArray.getInt(R.styleable.FlipperCalendar_nextMonthImage, R.drawable.ic_arrow_right_black_30dp);
             prevMonthImage = typedArray.getInt(R.styleable.FlipperCalendar_prevMonthImage, R.drawable.ic_arrow_left_black_30dp);
@@ -133,10 +117,6 @@ public class CustomCalendarView extends LinearLayout {
     private void applyLoadedPreferences() {
         changeMonthControlImages();
         changeCurrentDateColor(currDateColor);
-    }
-
-    private void changeNumberOfDaysToShow(boolean fillUpAllDays) {
-        numberOfDaysToShow = fillUpAllDays ? 42 : 0;
     }
 
     public void setCurrentDate(Date currentDateTop) {

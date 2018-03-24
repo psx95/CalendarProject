@@ -1,5 +1,8 @@
 package com.psx.calendarproject.CustomCalendar;
 
+import android.nfc.Tag;
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +15,7 @@ import java.util.HashMap;
 
 public class CalendarUtilities {
 
+    private static final String TAG = CalendarUtilities.class.getSimpleName();
     public static HashMap MAP_DATE_PATTERN_TO_INTEGER = new HashMap<Integer,String>() {{
         put(1, "MMM, yyyy");
         put(2, "dd/MM/yyyy");
@@ -50,11 +54,11 @@ public class CalendarUtilities {
         return true;
     }
 
-    public static boolean dateBelongsToCurrentMonthAndYear (Date date) {
+    public static boolean dateBelongsToCurrentMonthAndYear (Date date, Calendar calendarCurrentMonthAndYear) {
         Calendar calendar = Calendar.getInstance();
-        Calendar calendarToday = (Calendar) calendar.clone();
         calendar.setTime(date);
-        if (calendarToday.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && calendarToday.get(Calendar.YEAR) == calendar.get(Calendar.YEAR))
+        Log.d(TAG,"Calendars Compared Are "+calendar.get(Calendar.DATE)+"/"+calendar.get(Calendar.MONTH)+ " And "+calendarCurrentMonthAndYear.get(Calendar.DATE) + "/"+ calendarCurrentMonthAndYear.get(Calendar.MONTH));
+        if (calendarCurrentMonthAndYear.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && calendarCurrentMonthAndYear.get(Calendar.YEAR) == calendar.get(Calendar.YEAR))
             return true;
         else
             return false;
@@ -68,8 +72,10 @@ public class CalendarUtilities {
         calendar.add(Calendar.DAY_OF_MONTH, -beginningMonthCell);
         while (cells.size() < numberOfDaysToShow) {
             cells.add(calendar.getTime());
+            Log.d(TAG, "Added date "+calendar.getTime());
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
+        Log.d(TAG,"Returned Cells");
         return cells;
     }
 }

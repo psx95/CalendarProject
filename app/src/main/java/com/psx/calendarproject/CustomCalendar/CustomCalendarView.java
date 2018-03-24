@@ -29,6 +29,9 @@ import static com.psx.calendarproject.CustomCalendar.CalendarUtilities.generateC
 
 /**
  * Created by Pranav Sharma on 17-03-2018.
+ * NOTE : We have two calendar instances here - one is calendarToday and the other is calendar, The calendarToday is used to generate the dates for
+ * this month. The other instance is used to preserve the Month and Year of the current displayed month.
+ * While generating dates, the month often shifts to the next one
  */
 
 public class CustomCalendarView extends LinearLayout {
@@ -54,34 +57,35 @@ public class CustomCalendarView extends LinearLayout {
 
     private GridView calendarGrid;
 
-    public CustomCalendarView(Context context) {
+    private CustomCalendarView(Context context) {
         super(context);
-        initView(context, null);
+        initView(context, null,calendarToday);
     }
 
-    public CustomCalendarView(Context context, @Nullable AttributeSet attrs) {
+    private CustomCalendarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initView(context, attrs);
     }
 
     public CustomCalendarView (Context context, AttributeSet attributeSet, Calendar calendar) {
         this (context,attributeSet);
-        this.calendarToday = calendar;
-        initView(context,attributeSet);
+        Log.d("CALENDARVIEW", "Calendar recieved is "+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
+        this.calendarToday = (Calendar) calendar.clone();
+        Log.d("CALENDARVIEW", "Calendar set is "+this.calendarToday.get(Calendar.MONTH)+"/"+this.calendarToday.get(Calendar.YEAR));
+        initView(context,attributeSet,calendar);
     }
 
-    public CustomCalendarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    private CustomCalendarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initView(context, attrs);
+        initView(context, attrs, calendarToday);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public CustomCalendarView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    private CustomCalendarView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        initView(context, attrs);
+        initView(context, attrs, calendarToday);
     }
 
-    private void initView(Context context, @Nullable AttributeSet attributeSet) {
+    private void initView(Context context, @Nullable AttributeSet attributeSet, Calendar calendar) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (layoutInflater != null) {
             inflatedView = layoutInflater.inflate(R.layout.custom_calendar, this);
@@ -96,9 +100,10 @@ public class CustomCalendarView extends LinearLayout {
             applyLoadedPreferences();
         }
         currentDateTop = calendarToday.getTime();
-        Log.d(TAG,"Time for this month is "+calendarToday.getTime());
+        Log.d(TAG+"Curr","Time for this month is "+calendarToday.getTime());
         setCurrentDate(currentDateTop);
-        fillCalendarGrid();
+        Log.d("CALENDAR-ADAPTER","passing calendar to grid "+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
+        fillCalendarGrid(calendar);
     }
 
     private void findAllViews(View view) {
@@ -148,9 +153,10 @@ public class CustomCalendarView extends LinearLayout {
         imageViewPrevMonth.setImageDrawable(getContext().getResources().getDrawable(prevMonthImage));
     }
 
-    private void fillCalendarGrid() {
-        ArrayList<Date> cells = generateCellsForCalendarGrid((Calendar) calendarToday.clone(),numberOfDaysToShow);
-        CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), cells, eventDates);
+    private void fillCalendarGrid(Calendar calendar) {
+        ArrayList<Date> cells = generateCellsForCalendarGrid(this.calendarToday, numberOfDaysToShow);
+        Log.d("CALANDER-ADAPTER","Sending calendar to adapter "+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
+        CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), cells, eventDates, calendar);
         setCalendarGridAdapter(calendarAdapter);
     }
 

@@ -39,18 +39,21 @@ public class FlipperCalendar extends LinearLayout {
 
     public FlipperCalendar(Context context) {
         super(context);
+        Log.d(TAG,"SIngle param constructor");
         initCalendarInstances();
         initView(context,null);
     }
 
     public FlipperCalendar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        Log.d(TAG,"multi param constructor");
         initCalendarInstances();
         initView(context,attrs);
     }
 
     public FlipperCalendar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        Log.d(TAG,"multi 3 param constructor");
         initCalendarInstances();
         initView(context,attrs);
     }
@@ -58,6 +61,7 @@ public class FlipperCalendar extends LinearLayout {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public FlipperCalendar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        Log.d(TAG,"multi 4 param constructor");
         initCalendarInstances();
         initView(context,attrs);
     }
@@ -92,12 +96,12 @@ public class FlipperCalendar extends LinearLayout {
 
     private ArrayList<CustomCalendarView> prepareArrayListOfCalendars(AttributeSet attributeSet) {
         ArrayList<CustomCalendarView>  customCalendarViews = new ArrayList<>();
-        CustomCalendarView currentMonth = new CustomCalendarView(getContext(),attributeSet, currentMonthCalendarInstance);
         Log.d(TAG, " Preparing current month instance. Month sent is "+ currentMonthCalendarInstance.get(Calendar.MONTH));
-        CustomCalendarView previousMonth = new CustomCalendarView(getContext(),attributeSet, previousMonthCalendarInstance);
+        CustomCalendarView currentMonth = new CustomCalendarView(getContext(),attributeSet, currentMonthCalendarInstance);
         Log.d(TAG," Preparing previous motnh instance. Month sent is "+previousMonthCalendarInstance.get(Calendar.MONTH));
-        CustomCalendarView nextMonth = new CustomCalendarView(getContext(),attributeSet, nextMonthCalendarInstance);
+        CustomCalendarView previousMonth = new CustomCalendarView(getContext(),attributeSet, previousMonthCalendarInstance);
         Log.d(TAG, " Preparing next Month instance. Month sent is "+nextMonthCalendarInstance.get(Calendar.MONTH));
+        CustomCalendarView nextMonth = new CustomCalendarView(getContext(),attributeSet, nextMonthCalendarInstance);
         customCalendarViews.add(previousMonth);
         customCalendarViews.add(currentMonth);
         customCalendarViews.add(nextMonth);

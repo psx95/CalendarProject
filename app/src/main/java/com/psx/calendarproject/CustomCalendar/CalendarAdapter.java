@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,11 +31,14 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
     private HashSet<Date> specialDateList = new HashSet<>();
     private ArrayList<Date> allDates = new ArrayList<>();
     private LayoutInflater layoutInflater;
+    private Calendar calendar;
 
-    public CalendarAdapter (Context context,ArrayList<Date> allDates, HashSet<Date> specialDateList) {
+    public CalendarAdapter (Context context,ArrayList<Date> allDates, HashSet<Date> specialDateList, Calendar calendar) {
         super(context, R.layout.cutsom_calendar_day, allDates);
         this.allDates = allDates;
         this.specialDateList = specialDateList;
+        this.calendar = calendar;
+        Log.d("ADAPTER-CALANDER","Calendar object "+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -62,6 +66,8 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Date date = getItem(position);
+        // used for highlighting the current date
+        Log.d("CURRENT DATE", " Date is "+date);
         Date today = Calendar.getInstance().getTime();
         TextView textViewDate = null;
         if (convertView == null) {
@@ -76,19 +82,27 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
                 }
             }
         }
+        // highlight current date
         if (textViewDate!=null && CalendarUtilities.areDatesSame(date,today)) {
             textViewDate.setTextColor(convertView.getContext().getResources().getColor(R.color.colorPrimaryDark));
         }
-        grayOutDateIfNotOfThisMonth (convertView, date);
-        Calendar calendarDate = Calendar.getInstance();
+        Calendar calendarDate = (Calendar) calendar.clone();
         calendarDate.setTime(date);
+        Log.d("CURRENT DATE", " Date after converting to calendar "+calendarDate.get(Calendar.DATE) +"/"
+        +calendarDate.get(Calendar.MONTH)+"/"+ calendarDate.get(Calendar.YEAR));
+        Log.d("CURRENT MONTH", calendar.get(Calendar.MONTH) +" is the month");
+        grayOutDateIfNotOfThisMonth (convertView, date, calendar);
         if (textViewDate!=null)
             textViewDate.setText(String.valueOf(calendarDate.get(Calendar.DATE)));
         return convertView;
     }
 
-    private void grayOutDateIfNotOfThisMonth(View convertView, Date date) {
-        if (!CalendarUtilities.dateBelongsToCurrentMonthAndYear(date)) {
+    private void grayOutDateIfNotOfThisMonth(View convertView, Date date, Calendar calendar) {
+        Calendar calendar1 = (Calendar) calendar.clone();
+        calendar1.setTime(date);
+        Log.d("GRAYOUT","compared Date "+calendar.get(Calendar.MONTH) + "/"+ calendar.get(Calendar.YEAR)
+                + " & " +calendar1.get(Calendar.MONTH)+"/"+calendar1.get(Calendar.YEAR));
+        if (!CalendarUtilities.dateBelongsToCurrentMonthAndYear(date,calendar)) {
             TextView textView_date = convertView.findViewById(R.id.date_display);
             if (CustomCalendarView.fillUpAllDays) {
                 textView_date.setTextColor(getContext().getResources().getColor(R.color.greyed_out));

@@ -24,6 +24,7 @@
         android:id="@+id/flip_cal"
         app:dateDisplayFormt = "month_year"
         app:currDateColor = "@color/colorAccent"
+        app:fillUpAllDays="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

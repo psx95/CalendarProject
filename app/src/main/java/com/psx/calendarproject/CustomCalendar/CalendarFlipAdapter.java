@@ -15,6 +15,7 @@ public class CalendarFlipAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<CustomCalendarView> customCalendarViews;
+    private static int currPosition = 1;
 
     public CalendarFlipAdapter(Context context, ArrayList<CustomCalendarView> customCalendarViews) {
         this.context = context;
@@ -28,7 +29,8 @@ public class CalendarFlipAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return null;
+        currPosition = position;
+        return customCalendarViews.get(position);
     }
 
     @Override
@@ -39,5 +41,9 @@ public class CalendarFlipAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         return customCalendarViews.get(position);
+    }
+
+    public int getCurrentViewPos () {
+        return currPosition;
     }
 }

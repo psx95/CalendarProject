@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,6 +28,7 @@ import java.util.HashSet;
 
 public class FlipperCalendar extends LinearLayout {
 
+    private static final String TAG = FlipperCalendar.class.getSimpleName();
     private static final int SWIPE_MIN_DISTANCE = 120;
     private static final int SWIPE_THRESHOLD_VELOCITY = 200;
     private LayoutInflater layoutInflater;
@@ -44,20 +46,20 @@ public class FlipperCalendar extends LinearLayout {
     public FlipperCalendar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initCalendarInstances();
-        initView(context,null);
+        initView(context,attrs);
     }
 
     public FlipperCalendar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initCalendarInstances();
-        initView(context,null);
+        initView(context,attrs);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public FlipperCalendar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initCalendarInstances();
-        initView(context,null);
+        initView(context,attrs);
     }
 
     public void initView (Context context, @Nullable AttributeSet attributeSet) {
@@ -65,7 +67,7 @@ public class FlipperCalendar extends LinearLayout {
         if (layoutInflater!=null)
             inflatedView = layoutInflater.inflate(R.layout.flipper_calendar, this);
         adapterViewFlipper = inflatedView.findViewById(R.id.calendarFlipper);
-        ArrayList<CustomCalendarView> customCalendarViews = prepareArrayListOfCalendars();
+        ArrayList<CustomCalendarView> customCalendarViews = prepareArrayListOfCalendars(attributeSet);
         CalendarFlipAdapter calendarFlipAdapter = new CalendarFlipAdapter(context, customCalendarViews);
         adapterViewFlipper.setAdapter(calendarFlipAdapter);
         gestureDetectorCompat = new GestureDetectorCompat(context,new SwipeGestureDetector());
@@ -85,27 +87,30 @@ public class FlipperCalendar extends LinearLayout {
         previousMonthCalendarInstance.add(Calendar.MONTH,-1);
         nextMonthCalendarInstance = (Calendar)currentMonthCalendarInstance.clone();
         nextMonthCalendarInstance.add(Calendar.MONTH,1);
+        Log.d(TAG," Month instances prepared are previous month "+ previousMonthCalendarInstance.get(Calendar.MONTH)+ " Current Month "+ currentMonthCalendarInstance.get(Calendar.MONTH)+ " Next Month "+ nextMonthCalendarInstance.get(Calendar.MONTH));
     }
 
-    private ArrayList<CustomCalendarView> prepareArrayListOfCalendars() {
+    private ArrayList<CustomCalendarView> prepareArrayListOfCalendars(AttributeSet attributeSet) {
         ArrayList<CustomCalendarView>  customCalendarViews = new ArrayList<>();
-        CustomCalendarView currentMonth = new CustomCalendarView(getContext());
+        CustomCalendarView currentMonth = new CustomCalendarView(getContext(),attributeSet);
+        Log.d(TAG, " Preparing current month instance. Month sent is "+ currentMonthCalendarInstance.get(Calendar.MONTH));
         currentMonth = prepareMonth(currentMonth, currentMonthCalendarInstance);
-        CustomCalendarView previousMonth = new CustomCalendarView(getContext());
+        CustomCalendarView previousMonth = new CustomCalendarView(getContext(),attributeSet);
+        Log.d(TAG," Preparing previous motnh instance. Month sent is "+previousMonthCalendarInstance.get(Calendar.MONTH));
         previousMonth = prepareMonth(previousMonth, previousMonthCalendarInstance);
-        CustomCalendarView nextMonth = new CustomCalendarView(getContext());
+        CustomCalendarView nextMonth = new CustomCalendarView(getContext(),attributeSet);
+        Log.d(TAG, " Preparing next Month instance. Month sent is "+nextMonthCalendarInstance.get(Calendar.MONTH));
         nextMonth = prepareMonth(nextMonth, nextMonthCalendarInstance);
         customCalendarViews.add(previousMonth);
         customCalendarViews.add(currentMonth);
         customCalendarViews.add(nextMonth);
-
         return customCalendarViews;
     }
 
     private CustomCalendarView prepareMonth(CustomCalendarView currentMonth,Calendar currentMonthCalendar) {
+        currentMonth.setCurrentDate(currentMonthCalendar.getTime());
         CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(),CalendarUtilities.generateCellsForCalendarGrid(currentMonthCalendar,42),new HashSet<Date>());
         currentMonth.setCurrentCalendarMonthAndYear(currentMonthCalendar);
-        currentMonth.setCurrentDate(currentMonthCalendar.getTime());
         currentMonth.setCalendarGridAdapter(calendarAdapter);
         return currentMonth;
     }

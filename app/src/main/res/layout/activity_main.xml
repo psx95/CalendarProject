@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,7 +19,11 @@
         app:fillUpAllDays="false" />-->
 
     <com.psx.calendarproject.CustomCalendar.FlipperCalendar
+        xmlns:CalendarNS="http://schemas.android.com/apk/res/com.psx.calendarproject.CustomCalendar"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/flip_cal"
+        app:dateDisplayFormt = "month_year"
+        app:currDateColor = "@color/colorAccent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

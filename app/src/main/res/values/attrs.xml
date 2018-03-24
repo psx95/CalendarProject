@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="CustomCalendarView">
+    <declare-styleable name="FlipperCalendar">
         <attr name="fillUpAllDays" format="boolean" />
         <attr name="dateDisplayFormt">
             <enum name="month_year" value="1" />

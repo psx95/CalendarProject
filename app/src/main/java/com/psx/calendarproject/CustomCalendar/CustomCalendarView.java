@@ -90,6 +90,7 @@ public class CustomCalendarView extends LinearLayout {
             applyLoadedPreferences();
         }
         currentDateTop = calendarToday.getTime();
+        Log.d(TAG,"Time for this month is "+calendarToday.getTime());
         setCurrentDate(currentDateTop);
         fillCalendarGrid();
     }
@@ -105,14 +106,14 @@ public class CustomCalendarView extends LinearLayout {
     }
 
     private void loadPreferencesFromAttributes(AttributeSet attributeSet) {
-        TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.CustomCalendarView);
+        TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.FlipperCalendar);
         try {
-            fillUpAllDays = typedArray.getBoolean(R.styleable.CustomCalendarView_fillUpAllDays, true);
-            dateDisplayFormat = (String) CalendarUtilities.MAP_DATE_PATTERN_TO_INTEGER.get(Integer.parseInt(typedArray.getString(R.styleable.CustomCalendarView_dateDisplayFormt)));
-            showSeasonalColorsOnMonths = typedArray.getBoolean(R.styleable.CustomCalendarView_showSeasonalColorsOnMonths, false);
-            nextMonthImage = typedArray.getInt(R.styleable.CustomCalendarView_nextMonthImage, R.drawable.ic_arrow_right_black_30dp);
-            prevMonthImage = typedArray.getInt(R.styleable.CustomCalendarView_prevMonthImage, R.drawable.ic_arrow_left_black_30dp);
-            currDateColor = typedArray.getColorStateList(R.styleable.CustomCalendarView_currDateColor);
+            fillUpAllDays = typedArray.getBoolean(R.styleable.FlipperCalendar_fillUpAllDays, true);
+            dateDisplayFormat = (String) CalendarUtilities.MAP_DATE_PATTERN_TO_INTEGER.get(Integer.parseInt(typedArray.getString(R.styleable.FlipperCalendar_dateDisplayFormt)));
+            showSeasonalColorsOnMonths = typedArray.getBoolean(R.styleable.FlipperCalendar_showSeasonalColorsOnMonths, false);
+            nextMonthImage = typedArray.getInt(R.styleable.FlipperCalendar_nextMonthImage, R.drawable.ic_arrow_right_black_30dp);
+            prevMonthImage = typedArray.getInt(R.styleable.FlipperCalendar_prevMonthImage, R.drawable.ic_arrow_left_black_30dp);
+            currDateColor = typedArray.getColorStateList(R.styleable.FlipperCalendar_currDateColor);
         } finally {
             typedArray.recycle();
         }

@@ -10,5 +10,6 @@
         <attr name="prevMonthImage" format="integer" />
         <attr name="showSeasonalColorsOnMonths" format="boolean" />
         <attr name="currDateColor" format="reference" />
+        <attr name="scrollEnabled" format="boolean" />
     </declare-styleable>
 </resources>

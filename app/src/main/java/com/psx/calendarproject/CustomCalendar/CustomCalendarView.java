@@ -3,12 +3,11 @@ package com.psx.calendarproject.CustomCalendar;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.os.Build;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -48,6 +47,7 @@ public class CustomCalendarView extends LinearLayout {
     private boolean showSeasonalColorsOnMonths = false;
     private int nextMonthImage, prevMonthImage;
     private ColorStateList currDateColor;
+    private boolean scrollEnabled = false;
 
     //fields in the custom View
     private LinearLayout calendarTopBar, weekDaysContainer, gridViewContainer;
@@ -109,6 +109,7 @@ public class CustomCalendarView extends LinearLayout {
             nextMonthImage = typedArray.getInt(R.styleable.FlipperCalendar_nextMonthImage, R.drawable.ic_arrow_right_black_30dp);
             prevMonthImage = typedArray.getInt(R.styleable.FlipperCalendar_prevMonthImage, R.drawable.ic_arrow_left_black_30dp);
             currDateColor = typedArray.getColorStateList(R.styleable.FlipperCalendar_currDateColor);
+            scrollEnabled = typedArray.getBoolean(R.styleable.FlipperCalendar_scrollEnabled,false);
         } finally {
             typedArray.recycle();
         }
@@ -117,6 +118,18 @@ public class CustomCalendarView extends LinearLayout {
     private void applyLoadedPreferences() {
         changeMonthControlImages();
         changeCurrentDateColor(currDateColor);
+        changeScrollMode(scrollEnabled);
+    }
+
+    private void changeScrollMode(boolean scrollEnabled) {
+        if (!scrollEnabled) {
+            calendarGrid.setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return event.getAction() == MotionEvent.ACTION_MOVE;
+                }
+            });
+        }
     }
 
     public void setCurrentDate(Date currentDateTop) {

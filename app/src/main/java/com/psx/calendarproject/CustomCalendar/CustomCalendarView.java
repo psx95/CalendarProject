@@ -41,6 +41,7 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
     private int numberOfDaysToShow = 42;
     private HashSet<Date> eventDates = new HashSet<>();
     private Date currentDateTop;
+    private Calendar preservedCalender;
 
     // attribute values
     public static boolean fillUpAllDays = true;
@@ -68,10 +69,11 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
         Log.d("CALENDARVIEW", "Calendar recieved is "+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
         this.calendarToday = (Calendar) calendar.clone();
         Log.d("CALENDARVIEW", "Calendar set is "+this.calendarToday.get(Calendar.MONTH)+"/"+this.calendarToday.get(Calendar.YEAR));
-        initView(context,attributeSet,calendar);
+        this.preservedCalender = calendar;
+        initView(context,attributeSet);
     }
 
-    private void initView(Context context, @Nullable AttributeSet attributeSet, Calendar calendar) {
+    private void initView(Context context, @Nullable AttributeSet attributeSet) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (layoutInflater != null) {
             inflatedView = layoutInflater.inflate(R.layout.custom_calendar, this);
@@ -88,8 +90,8 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
         currentDateTop = calendarToday.getTime();
         Log.d(TAG+"Curr","Time for this month is "+calendarToday.getTime());
         setCurrentDate(currentDateTop);
-        Log.d("CALENDAR-ADAPTER","passing calendar to grid "+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
-        fillCalendarGrid(calendar);
+        Log.d("CALENDAR-ADAPTER","passing calendar to grid "+this.preservedCalender.get(Calendar.MONTH)+"/"+this.preservedCalender.get(Calendar.YEAR));
+        fillCalendarGrid(this.preservedCalender);
     }
 
     private void findAllViews(View view) {
@@ -166,6 +168,10 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
 
     public void setCurrentDateTop(Date currentDateTop) {
         this.currentDateTop = currentDateTop;
+    }
+
+    public Calendar getThisMonthCalendar() {
+        return this.preservedCalender;
     }
 
     @Override

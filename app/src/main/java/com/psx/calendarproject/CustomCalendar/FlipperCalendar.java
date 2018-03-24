@@ -39,8 +39,8 @@ public class FlipperCalendar extends LinearLayout {
     private AdapterViewFlipper adapterViewFlipper;
     private GestureDetectorCompat gestureDetectorCompat;
     Calendar currentMonthCalendarInstance, previousMonthCalendarInstance, nextMonthCalendarInstance;
-    private static UserInputCallback callbackListener;
-    private CalendarFlipAdapter  calendarFlipAdapter;
+    private CalendarFlipAdapter calendarFlipAdapter;
+    private static int currentDisplayedViewPos = 1;
 
     //attributes from XML
     private boolean animate = true;
@@ -48,6 +48,9 @@ public class FlipperCalendar extends LinearLayout {
     private int right_out = R.animator.right_out;
     private int left_in = R.animator.left_in;
     private int left_out = R.animator.left_out;
+
+    // Three current months vars
+    CustomCalendarView currentMonth, nextMonth, previousMonth;
 
     public FlipperCalendar(Context context) {
         super(context);
@@ -102,8 +105,8 @@ public class FlipperCalendar extends LinearLayout {
     }
 
     private void extractPreferencesForFlipperCalendar(AttributeSet attributeSet) {
-        if (attributeSet!=null) {
-            TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet,R.styleable.FlipperCalendar);
+        if (attributeSet != null) {
+            TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet, R.styleable.FlipperCalendar);
             try {
                 animate = typedArray.getBoolean(R.styleable.FlipperCalendar_animateChange, true);
                 left_in = typedArray.getResourceId(R.styleable.FlipperCalendar_animLeftIn, left_in);
@@ -127,9 +130,9 @@ public class FlipperCalendar extends LinearLayout {
 
     private ArrayList<CustomCalendarView> prepareArrayListOfCalendars(AttributeSet attributeSet) {
         ArrayList<CustomCalendarView> customCalendarViews = new ArrayList<>();
-        CustomCalendarView currentMonth = new CustomCalendarView(getContext(), attributeSet, currentMonthCalendarInstance);
-        CustomCalendarView previousMonth = new CustomCalendarView(getContext(), attributeSet, previousMonthCalendarInstance);
-        CustomCalendarView nextMonth = new CustomCalendarView(getContext(), attributeSet, nextMonthCalendarInstance);
+        currentMonth = new CustomCalendarView(getContext(), attributeSet, currentMonthCalendarInstance);
+        previousMonth = new CustomCalendarView(getContext(), attributeSet, previousMonthCalendarInstance);
+        nextMonth = new CustomCalendarView(getContext(), attributeSet, nextMonthCalendarInstance);
         customCalendarViews.add(previousMonth);
         customCalendarViews.add(currentMonth);
         customCalendarViews.add(nextMonth);
@@ -142,12 +145,6 @@ public class FlipperCalendar extends LinearLayout {
             @Override
             public void onMonthForward() {
                 shiftMonthForwards(right_in, right_out);
-                if (adapterViewFlipper.getAdapter() instanceof CalendarFlipAdapter)
-                    Toast.makeText(getContext(),"Current View At Pos "+ calendarFlipAdapter.getCurrentViewPos(),Toast.LENGTH_SHORT).show();
-                else {
-                    Log.e(TAG, "Adapter not of type");
-                    Toast.makeText(getContext(),"Current View At Pos "+ calendarFlipAdapter.getCurrentViewPos(),Toast.LENGTH_SHORT).show();
-                }
             }
 
             @Override
@@ -157,7 +154,15 @@ public class FlipperCalendar extends LinearLayout {
         });
     }
 
+    @DebugLog
     private void shiftMonthForwards(int right_in, int right_out) {
+        if (currentDisplayedViewPos < 3)
+            currentDisplayedViewPos++;
+        /*if (currentDisplayedViewPos == 2) {
+            previousMonth = currentMonth;
+            currentMonth = nextMonth;
+            CustomCalendarView newNextMonth = computeNewNextMonth(currentMonth);
+        }*/
         if (animate) {
             adapterViewFlipper.setInAnimation(getContext(), right_in);
             adapterViewFlipper.setOutAnimation(getContext(), right_out);
@@ -165,13 +170,19 @@ public class FlipperCalendar extends LinearLayout {
         adapterViewFlipper.showNext();
     }
 
+    private CustomCalendarView computeNewNextMonth(CustomCalendarView currentMonth) {
+        return null;
+    }
+
+    @DebugLog
     private void shiftMonthBackwards(int left_in, int left_out) {
+        if (currentDisplayedViewPos > 0)
+            currentDisplayedViewPos--;
         if (animate) {
             adapterViewFlipper.setInAnimation(getContext(), left_in);
             adapterViewFlipper.setOutAnimation(getContext(), left_out);
         }
         adapterViewFlipper.showPrevious();
-        /*Toast.makeText(getContext(),"View position "+adapterViewFlipper.getPositionForView(adapterViewFlipper.getCurrentView()),Toast.LENGTH_SHORT).show();*/
     }
 
     class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {

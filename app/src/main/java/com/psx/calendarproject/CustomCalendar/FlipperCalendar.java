@@ -1,6 +1,7 @@
 package com.psx.calendarproject.CustomCalendar;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -37,6 +38,13 @@ public class FlipperCalendar extends LinearLayout {
     private GestureDetectorCompat gestureDetectorCompat;
     Calendar currentMonthCalendarInstance, previousMonthCalendarInstance, nextMonthCalendarInstance;
     private static UserInputCallback callbackListener;
+
+    //attributes from XML
+    private boolean animate = true;
+    private int right_in = R.animator.right_in;
+    private int right_out = R.animator.right_out;
+    private int left_in = R.animator.left_in;
+    private int left_out = R.animator.left_out;
 
     public FlipperCalendar(Context context) {
         super(context);
@@ -77,6 +85,7 @@ public class FlipperCalendar extends LinearLayout {
         CalendarFlipAdapter calendarFlipAdapter = new CalendarFlipAdapter(context, customCalendarViews);
         adapterViewFlipper.setAdapter(calendarFlipAdapter);
         gestureDetectorCompat = new GestureDetectorCompat(context, new SwipeGestureDetector());
+        extractPreferencesForFlipperCalendar(attributeSet);
         adapterViewFlipper.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -84,6 +93,21 @@ public class FlipperCalendar extends LinearLayout {
                 return true;
             }
         });
+    }
+
+    private void extractPreferencesForFlipperCalendar(AttributeSet attributeSet) {
+        if (attributeSet!=null) {
+            TypedArray typedArray = getContext().obtainStyledAttributes(attributeSet,R.styleable.FlipperCalendar);
+            try {
+                animate = typedArray.getBoolean(R.styleable.FlipperCalendar_animateChange, true);
+                left_in = typedArray.getResourceId(R.styleable.FlipperCalendar_animLeftIn, left_in);
+                left_out = typedArray.getResourceId(R.styleable.FlipperCalendar_animLeftOut, left_out);
+                right_in = typedArray.getResourceId(R.styleable.FlipperCalendar_animRightIn, right_in);
+                right_out = typedArray.getResourceId(R.styleable.FlipperCalendar_animRightOut, right_out);
+            } finally {
+                typedArray.recycle();
+            }
+        }
     }
 
     private void initCalendarInstances() {
@@ -113,11 +137,19 @@ public class FlipperCalendar extends LinearLayout {
         CustomCalendarView.setCallbackListener(new UserInputCallback() {
             @Override
             public void onMonthForward() {
+                if (animate) {
+                    adapterViewFlipper.setInAnimation(getContext(), right_in);
+                    adapterViewFlipper.setOutAnimation(getContext(), right_out);
+                }
                 adapterViewFlipper.showNext();
             }
 
             @Override
             public void onMonthBackward() {
+                if (animate) {
+                    adapterViewFlipper.setInAnimation(getContext(), left_in);
+                    adapterViewFlipper.setOutAnimation(getContext(), left_out);
+                }
                 adapterViewFlipper.showPrevious();
             }
         });
@@ -129,13 +161,17 @@ public class FlipperCalendar extends LinearLayout {
             try {
                 // right to left swipe
                 if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    adapterViewFlipper.setInAnimation(getContext(), R.animator.left_in);
-                    adapterViewFlipper.setOutAnimation(getContext(), R.animator.left_out);
+                    if (animate) {
+                        adapterViewFlipper.setInAnimation(getContext(), left_in);
+                        adapterViewFlipper.setOutAnimation(getContext(), left_out);
+                    }
                     adapterViewFlipper.showNext();
                     return true;
                 } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
-                    adapterViewFlipper.setInAnimation(getContext(), R.animator.right_in);
-                    adapterViewFlipper.setOutAnimation(getContext(), R.animator.right_out);
+                    if (animate) {
+                        adapterViewFlipper.setInAnimation(getContext(), right_in);
+                        adapterViewFlipper.setOutAnimation(getContext(), right_out);
+                    }
                     adapterViewFlipper.showPrevious();
                     return true;
                 }

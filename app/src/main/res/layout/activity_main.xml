@@ -14,7 +14,12 @@
         app:dateDisplayFormat = "month_year"
         app:currDateColor = "@color/colorAccent"
         app:fillUpAllDays="false"
-        app:scrollEnabled="true"
+        app:scrollEnabled="false"
+        app:animateChange="true"
+        app:animLeftIn="@animator/left_in"
+        app:animLeftOut="@animator/left_out"
+        app:animRightIn="@animator/right_in"
+        app:animRightOut="@animator/right_out"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

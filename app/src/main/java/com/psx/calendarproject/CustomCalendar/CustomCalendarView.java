@@ -110,8 +110,8 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
             fillUpAllDays = typedArray.getBoolean(R.styleable.FlipperCalendar_fillUpAllDays, true);
             dateDisplayFormat = (String) CalendarUtilities.MAP_DATE_PATTERN_TO_INTEGER.get(Integer.parseInt(typedArray.getString(R.styleable.FlipperCalendar_dateDisplayFormat)));
             showSeasonalColorsOnMonths = typedArray.getBoolean(R.styleable.FlipperCalendar_showSeasonalColorsOnMonths, false);
-            nextMonthImage = typedArray.getInt(R.styleable.FlipperCalendar_nextMonthImage, R.drawable.ic_arrow_right_black_30dp);
-            prevMonthImage = typedArray.getInt(R.styleable.FlipperCalendar_prevMonthImage, R.drawable.ic_arrow_left_black_30dp);
+            nextMonthImage = typedArray.getResourceId(R.styleable.FlipperCalendar_nextMonthImage, R.drawable.ic_arrow_right_black_30dp);
+            prevMonthImage = typedArray.getResourceId(R.styleable.FlipperCalendar_prevMonthImage, R.drawable.ic_arrow_left_black_30dp);
             currDateColor = typedArray.getColorStateList(R.styleable.FlipperCalendar_currDateColor);
             scrollEnabled = typedArray.getBoolean(R.styleable.FlipperCalendar_scrollEnabled,false);
         } finally {

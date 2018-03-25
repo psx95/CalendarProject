@@ -184,6 +184,17 @@ public class FlipperCalendar extends LinearLayout {
 
     @DebugLog
     private void shiftMonthBackwards(int left_in, int left_out) {
+        if (currentDisplayedViewPos == 0) {
+            Log.e(TAG,"Calendar current view reached pos 0. New Calendars");
+            for (Calendar calendar : calendarInstances) {
+                calendar.add(Calendar.MONTH, -1);
+                Log.d(TAG,"Added a month "+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
+            }
+            Log.i(TAG,"Updating List");
+            calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews);
+            adapterViewFlipper.setAdapter(calendarFlipAdapter);
+            adapterViewFlipper.setDisplayedChild(1);
+        }
         if (currentDisplayedViewPos > 0)
             currentDisplayedViewPos--;
         if (animate) {

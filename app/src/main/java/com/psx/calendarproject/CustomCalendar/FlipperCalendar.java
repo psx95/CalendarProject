@@ -162,17 +162,7 @@ public class FlipperCalendar extends LinearLayout {
 
     @DebugLog
     private void shiftMonthForwards(int right_in, int right_out) {
-        if (currentDisplayedViewPos == 2) {
-            Log.e(TAG,"Calendar current view reached pos 2. New Calendars");
-            for (Calendar calendar : calendarInstances) {
-                calendar.add(Calendar.MONTH, 1);
-                Log.d(TAG,"Added a month "+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
-            }
-            Log.i(TAG,"Updating List");
-            calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews);
-            adapterViewFlipper.setAdapter(calendarFlipAdapter);
-            adapterViewFlipper.setDisplayedChild(1);
-        }
+        computeMonthForViewRecycle(false);
         if (currentDisplayedViewPos < 2)
             currentDisplayedViewPos++;
         if (animate) {
@@ -184,17 +174,7 @@ public class FlipperCalendar extends LinearLayout {
 
     @DebugLog
     private void shiftMonthBackwards(int left_in, int left_out) {
-        if (currentDisplayedViewPos == 0) {
-            Log.e(TAG,"Calendar current view reached pos 0. New Calendars");
-            for (Calendar calendar : calendarInstances) {
-                calendar.add(Calendar.MONTH, -1);
-                Log.d(TAG,"Added a month "+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
-            }
-            Log.i(TAG,"Updating List");
-            calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews);
-            adapterViewFlipper.setAdapter(calendarFlipAdapter);
-            adapterViewFlipper.setDisplayedChild(1);
-        }
+        computeMonthForViewRecycle(true);
         if (currentDisplayedViewPos > 0)
             currentDisplayedViewPos--;
         if (animate) {
@@ -202,6 +182,19 @@ public class FlipperCalendar extends LinearLayout {
             adapterViewFlipper.setOutAnimation(getContext(), left_out);
         }
         adapterViewFlipper.showPrevious();
+    }
+
+    private void computeMonthForViewRecycle(boolean subtract) {
+        int compare = subtract ? 0 : 2;
+        int amount = subtract ? -1 : 1;
+        if (currentDisplayedViewPos == compare) {
+            for (Calendar calendar : calendarInstances) {
+                calendar.add(Calendar.MONTH, amount);
+            }
+            calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews);
+            adapterViewFlipper.setAdapter(calendarFlipAdapter);
+            adapterViewFlipper.setDisplayedChild(1);
+        }
     }
 
     class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {

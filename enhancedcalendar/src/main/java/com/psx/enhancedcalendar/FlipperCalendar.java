@@ -1,4 +1,4 @@
-package com.psx.calendarproject.CustomCalendar;
+package com.psx.enhancedcalendar;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -16,14 +16,13 @@ import android.widget.AdapterViewFlipper;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.psx.calendarproject.R;
+import com.psx.enhancedcalendar.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 
-import hugo.weaving.DebugLog;
 
 /**
  * Created by Pranav Sharma on 18-03-2018.
@@ -70,7 +69,6 @@ public class FlipperCalendar extends LinearLayout {
         setupCallbackListeners();
     }
 
-    @DebugLog
     public FlipperCalendar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         Log.d(TAG, "multi 3 param constructor");
@@ -85,8 +83,7 @@ public class FlipperCalendar extends LinearLayout {
         initCalendarInstances();
         initView(context, attrs);
     }
-
-    @DebugLog
+    
     public void initView(Context context, @Nullable AttributeSet attributeSet) {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (layoutInflater != null)
@@ -122,7 +119,7 @@ public class FlipperCalendar extends LinearLayout {
         }
     }
 
-    @DebugLog
+    
     private void initCalendarInstances() {
         currentMonthCalendarInstance = Calendar.getInstance();
         previousMonthCalendarInstance = (Calendar) currentMonthCalendarInstance.clone();
@@ -145,7 +142,7 @@ public class FlipperCalendar extends LinearLayout {
         return customCalendarViews;
     }
 
-    @DebugLog
+     
     private void setupCallbackListeners() {
         CustomCalendarView.setCallbackListener(new UserInputCallback() {
             @Override
@@ -160,7 +157,7 @@ public class FlipperCalendar extends LinearLayout {
         });
     }
 
-    @DebugLog
+     
     private void shiftMonthForwards(int right_in, int right_out) {
         computeMonthForViewRecycle(false);
         if (currentDisplayedViewPos < 2)
@@ -172,7 +169,7 @@ public class FlipperCalendar extends LinearLayout {
         adapterViewFlipper.showNext();
     }
 
-    @DebugLog
+     
     private void shiftMonthBackwards(int left_in, int left_out) {
         computeMonthForViewRecycle(true);
         if (currentDisplayedViewPos > 0)

@@ -1,4 +1,4 @@
-package com.psx.calendarproject.CustomCalendar;
+package com.psx.enhancedcalendar;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.psx.calendarproject.R;
+import com.psx.enhancedcalendar.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;

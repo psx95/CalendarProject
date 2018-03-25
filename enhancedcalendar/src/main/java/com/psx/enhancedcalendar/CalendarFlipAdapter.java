@@ -1,4 +1,4 @@
-package com.psx.calendarproject.CustomCalendar;
+package com.psx.enhancedcalendar;
 
 import android.content.Context;
 import android.util.Log;

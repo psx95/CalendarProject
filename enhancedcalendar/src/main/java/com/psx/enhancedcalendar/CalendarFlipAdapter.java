@@ -20,7 +20,7 @@ public class CalendarFlipAdapter extends BaseAdapter {
     private ArrayList<CustomCalendarView> customCalendarViews;
     private static int currPosition = 1;
 
-    public CalendarFlipAdapter(ArrayList<Calendar> calendars, ArrayList<CustomCalendarView> calendarViews) {
+    CalendarFlipAdapter(ArrayList<Calendar> calendars, ArrayList<CustomCalendarView> calendarViews) {
         this.calendars = calendars;
         this.customCalendarViews = calendarViews;
     }

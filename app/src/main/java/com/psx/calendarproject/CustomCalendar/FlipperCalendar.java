@@ -41,6 +41,9 @@ public class FlipperCalendar extends LinearLayout {
     Calendar currentMonthCalendarInstance, previousMonthCalendarInstance, nextMonthCalendarInstance;
     private CalendarFlipAdapter calendarFlipAdapter;
     private static int currentDisplayedViewPos = 1;
+    private ArrayList<Calendar> calendarInstances = new ArrayList<>();
+
+    ArrayList<CustomCalendarView> customCalendarViews;
 
     //attributes from XML
     private boolean animate = true;
@@ -89,8 +92,8 @@ public class FlipperCalendar extends LinearLayout {
         if (layoutInflater != null)
             inflatedView = layoutInflater.inflate(R.layout.flipper_calendar, this);
         adapterViewFlipper = inflatedView.findViewById(R.id.calendarFlipper);
-        ArrayList<CustomCalendarView> customCalendarViews = prepareArrayListOfCalendars(attributeSet);
-        calendarFlipAdapter = new CalendarFlipAdapter(context, customCalendarViews);
+        customCalendarViews = prepareArrayListOfCalendars(attributeSet);
+        calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews);
         adapterViewFlipper.setAdapter(calendarFlipAdapter);
         adapterViewFlipper.setDisplayedChild(1);
         gestureDetectorCompat = new GestureDetectorCompat(context, new SwipeGestureDetector());
@@ -126,6 +129,9 @@ public class FlipperCalendar extends LinearLayout {
         previousMonthCalendarInstance.add(Calendar.MONTH, -1);
         nextMonthCalendarInstance = (Calendar) currentMonthCalendarInstance.clone();
         nextMonthCalendarInstance.add(Calendar.MONTH, 1);
+        calendarInstances.add(previousMonthCalendarInstance);
+        calendarInstances.add(currentMonthCalendarInstance);
+        calendarInstances.add(nextMonthCalendarInstance);
     }
 
     private ArrayList<CustomCalendarView> prepareArrayListOfCalendars(AttributeSet attributeSet) {
@@ -156,22 +162,24 @@ public class FlipperCalendar extends LinearLayout {
 
     @DebugLog
     private void shiftMonthForwards(int right_in, int right_out) {
-        if (currentDisplayedViewPos < 3)
+        if (currentDisplayedViewPos == 2) {
+            Log.e(TAG,"Calendar current view reached pos 2. New Calendars");
+            for (Calendar calendar : calendarInstances) {
+                calendar.add(Calendar.MONTH, 1);
+                Log.d(TAG,"Added a month "+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
+            }
+            Log.i(TAG,"Updating List");
+            calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews);
+            adapterViewFlipper.setAdapter(calendarFlipAdapter);
+            adapterViewFlipper.setDisplayedChild(1);
+        }
+        if (currentDisplayedViewPos < 2)
             currentDisplayedViewPos++;
-        /*if (currentDisplayedViewPos == 2) {
-            previousMonth = currentMonth;
-            currentMonth = nextMonth;
-            CustomCalendarView newNextMonth = computeNewNextMonth(currentMonth);
-        }*/
         if (animate) {
             adapterViewFlipper.setInAnimation(getContext(), right_in);
             adapterViewFlipper.setOutAnimation(getContext(), right_out);
         }
         adapterViewFlipper.showNext();
-    }
-
-    private CustomCalendarView computeNewNextMonth(CustomCalendarView currentMonth) {
-        return null;
     }
 
     @DebugLog

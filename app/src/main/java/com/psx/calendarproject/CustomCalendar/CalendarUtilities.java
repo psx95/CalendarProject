@@ -57,11 +57,7 @@ public class CalendarUtilities {
     public static boolean dateBelongsToCurrentMonthAndYear (Date date, Calendar calendarCurrentMonthAndYear) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        Log.d(TAG,"Calendars Compared Are "+calendar.get(Calendar.DATE)+"/"+calendar.get(Calendar.MONTH)+ " And "+calendarCurrentMonthAndYear.get(Calendar.DATE) + "/"+ calendarCurrentMonthAndYear.get(Calendar.MONTH));
-        if (calendarCurrentMonthAndYear.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && calendarCurrentMonthAndYear.get(Calendar.YEAR) == calendar.get(Calendar.YEAR))
-            return true;
-        else
-            return false;
+        return calendarCurrentMonthAndYear.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && calendarCurrentMonthAndYear.get(Calendar.YEAR) == calendar.get(Calendar.YEAR);
     }
 
     public static ArrayList<Date> generateCellsForCalendarGrid (Calendar calendar, int numberOfDaysToShow) {
@@ -72,10 +68,8 @@ public class CalendarUtilities {
         calendar.add(Calendar.DAY_OF_MONTH, -beginningMonthCell);
         while (cells.size() < numberOfDaysToShow) {
             cells.add(calendar.getTime());
-            Log.d(TAG, "Added date "+calendar.getTime());
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
-        Log.d(TAG,"Returned Cells");
         return cells;
     }
 }

@@ -1,4 +1,4 @@
-package com.psx.calendarproject.CustomCalendar;
+package com.psx.enhancedcalendar;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -11,12 +11,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.psx.calendarproject.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,7 +22,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 
-import static com.psx.calendarproject.CustomCalendar.CalendarUtilities.generateCellsForCalendarGrid;
+import static com.psx.enhancedcalendar.CalendarUtilities.generateCellsForCalendarGrid;
 
 /**
  * Created by Pranav Sharma on 17-03-2018.
@@ -64,13 +61,13 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
         super(context, attrs);
     }
 
-    public CustomCalendarView (Context context, AttributeSet attributeSet, Calendar calendar) {
-        this (context,attributeSet);
-        Log.d("CALENDARVIEW", "Calendar recieved is "+calendar.get(Calendar.MONTH)+"/"+calendar.get(Calendar.YEAR));
+    public CustomCalendarView(Context context, AttributeSet attributeSet, Calendar calendar) {
+        this(context, attributeSet);
+        Log.d("CALENDARVIEW", "Calendar recieved is " + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR));
         this.calendarToday = (Calendar) calendar.clone();
-        Log.d("CALENDARVIEW", "Calendar set is "+this.calendarToday.get(Calendar.MONTH)+"/"+this.calendarToday.get(Calendar.YEAR));
+        Log.d("CALENDARVIEW", "Calendar set is " + this.calendarToday.get(Calendar.MONTH) + "/" + this.calendarToday.get(Calendar.YEAR));
         this.preservedCalender = calendar;
-        initView(context,attributeSet);
+        initView(context, attributeSet);
     }
 
     private void initView(Context context, @Nullable AttributeSet attributeSet) {
@@ -88,9 +85,9 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
             applyLoadedPreferences();
         }
         currentDateTop = calendarToday.getTime();
-        Log.d(TAG+"Curr","Time for this month is "+calendarToday.getTime());
+        Log.d(TAG + "Curr", "Time for this month is " + calendarToday.getTime());
         setCurrentDate(currentDateTop);
-        Log.d("CALENDAR-ADAPTER","passing calendar to grid "+this.preservedCalender.get(Calendar.MONTH)+"/"+this.preservedCalender.get(Calendar.YEAR));
+        Log.d("CALENDAR-ADAPTER", "passing calendar to grid " + this.preservedCalender.get(Calendar.MONTH) + "/" + this.preservedCalender.get(Calendar.YEAR));
         //fillCalendarGrid(this.preservedCalender);
     }
 
@@ -115,7 +112,7 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
             nextMonthImage = typedArray.getResourceId(R.styleable.FlipperCalendar_nextMonthImage, R.drawable.ic_arrow_right_black_30dp);
             prevMonthImage = typedArray.getResourceId(R.styleable.FlipperCalendar_prevMonthImage, R.drawable.ic_arrow_left_black_30dp);
             currDateColor = typedArray.getColorStateList(R.styleable.FlipperCalendar_currDateColor);
-            scrollEnabled = typedArray.getBoolean(R.styleable.FlipperCalendar_scrollEnabled,false);
+            scrollEnabled = typedArray.getBoolean(R.styleable.FlipperCalendar_scrollEnabled, false);
         } finally {
             typedArray.recycle();
         }
@@ -161,13 +158,13 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
 
     public void fillCalendarGrid() {
         ArrayList<Date> cells = generateCellsForCalendarGrid(this.calendarToday, numberOfDaysToShow);
-        Log.d(TAG+"fill","Calendar Today "+this.calendarToday.get(Calendar.MONTH)+"/"+this.calendarToday.get(Calendar.YEAR));
-        Log.d(TAG+"fill","Preserved Calendar"+this.preservedCalender.get(Calendar.MONTH)+"/"+this.preservedCalender.get(Calendar.YEAR));
+        Log.d(TAG + "fill", "Calendar Today " + this.calendarToday.get(Calendar.MONTH) + "/" + this.calendarToday.get(Calendar.YEAR));
+        Log.d(TAG + "fill", "Preserved Calendar" + this.preservedCalender.get(Calendar.MONTH) + "/" + this.preservedCalender.get(Calendar.YEAR));
         CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), cells, eventDates, this.preservedCalender);
         setCalendarGridAdapter(calendarAdapter);
     }
 
-    public void setCalendarGridAdapter (CalendarAdapter calendarGridAdapter) {
+    public void setCalendarGridAdapter(CalendarAdapter calendarGridAdapter) {
         calendarGrid.setAdapter(calendarGridAdapter);
     }
 
@@ -183,7 +180,7 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
         return this.preservedCalender;
     }
 
-    public void setCalendars (Calendar calendar) {
+    public void setCalendars(Calendar calendar) {
         this.calendarToday = calendar;
         this.preservedCalender = calendar;
     }
@@ -191,15 +188,12 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id) {
-            case R.id.image_next_month:
-                callbackListener.onMonthForward();
-                break;
-            case R.id.image_prev_month:
-                callbackListener.onMonthBackward();
-                break;
-            default:
-                Log.e(TAG,"View with id "+id +" Not found.");
+        if (id == R.id.image_next_month) {
+            callbackListener.onMonthForward();
+        } else if (id == R.id.image_prev_month) {
+            callbackListener.onMonthBackward();
+        } else {
+            Log.e(TAG, "View with id " + id + " Not found.");
         }
     }
 

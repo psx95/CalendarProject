@@ -7,7 +7,7 @@
     android:weightSum="1"
     tools:context="com.psx.calendarproject.MainActivity">
 
-    <com.psx.enhancedcalendar.FlipperCalendar
+    <com.psx.calendarproject.CustomCalendar.FlipperCalendar
         xmlns:CalendarNS="http://schemas.android.com/apk/res/com.psx.calendarproject.CustomCalendar"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/flip_cal"

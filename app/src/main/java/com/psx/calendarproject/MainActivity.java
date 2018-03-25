@@ -1,10 +1,9 @@
 package com.psx.calendarproject;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import com.psx.calendarproject.CustomCalendar.CustomCalendarView;
-import com.psx.calendarproject.CustomCalendar.FlipperCalendar;
+import com.psx.enhancedcalendar.FlipperCalendar;
 
 public class MainActivity extends AppCompatActivity {
 

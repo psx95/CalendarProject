@@ -14,9 +14,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterViewFlipper;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
-import com.psx.enhancedcalendar.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,6 +38,7 @@ public class FlipperCalendar extends LinearLayout {
     private CalendarFlipAdapter calendarFlipAdapter;
     private static int currentDisplayedViewPos = 1;
     private ArrayList<Calendar> calendarInstances = new ArrayList<>();
+    private HashSet<Date> specialDays = new HashSet<>();
 
     ArrayList<CustomCalendarView> customCalendarViews;
 
@@ -84,15 +82,12 @@ public class FlipperCalendar extends LinearLayout {
         initView(context, attrs);
     }
     
-    public void initView(Context context, @Nullable AttributeSet attributeSet) {
+    private void initView(Context context, @Nullable AttributeSet attributeSet) {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (layoutInflater != null)
             inflatedView = layoutInflater.inflate(R.layout.flipper_calendar, this);
         adapterViewFlipper = inflatedView.findViewById(R.id.calendarFlipper);
         customCalendarViews = prepareArrayListOfCalendars(attributeSet);
-        calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews);
-        adapterViewFlipper.setAdapter(calendarFlipAdapter);
-        adapterViewFlipper.setDisplayedChild(1);
         gestureDetectorCompat = new GestureDetectorCompat(context, new SwipeGestureDetector());
         extractPreferencesForFlipperCalendar(attributeSet);
         adapterViewFlipper.setOnTouchListener(new OnTouchListener() {
@@ -102,6 +97,12 @@ public class FlipperCalendar extends LinearLayout {
                 return true;
             }
         });
+    }
+
+    public void displayCalendars () {
+        calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews,specialDays);
+        adapterViewFlipper.setAdapter(calendarFlipAdapter);
+        adapterViewFlipper.setDisplayedChild(1);
     }
 
     private void extractPreferencesForFlipperCalendar(AttributeSet attributeSet) {
@@ -156,7 +157,6 @@ public class FlipperCalendar extends LinearLayout {
             }
         });
     }
-
      
     private void shiftMonthForwards(int right_in, int right_out) {
         computeMonthForViewRecycle(false);
@@ -188,13 +188,21 @@ public class FlipperCalendar extends LinearLayout {
             for (Calendar calendar : calendarInstances) {
                 calendar.add(Calendar.MONTH, amount);
             }
-            calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews);
+            calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews,specialDays);
             adapterViewFlipper.setAdapter(calendarFlipAdapter);
             adapterViewFlipper.setDisplayedChild(1);
         }
     }
 
-    class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {
+    public HashSet<Date> getSpecialDays() {
+        return specialDays;
+    }
+
+    public void setSpecialDays(HashSet<Date> specialDays) {
+        this.specialDays = specialDays;
+    }
+
+    private class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             try {

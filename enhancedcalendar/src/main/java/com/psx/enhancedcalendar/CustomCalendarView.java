@@ -143,16 +143,10 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
         imageViewPrevMonth.setImageDrawable(getContext().getResources().getDrawable(prevMonthImage));
     }
 
-    public void fillCalendarGrid(Calendar calendar) {
+    public void fillCalendarGrid(Calendar calendar, HashSet<Date> eventDates) {
         Calendar calendar1 = (Calendar) calendar.clone();
         ArrayList<Date> cells = generateCellsForCalendarGrid(calendar1, numberOfDaysToShow);
         CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), cells, eventDates, calendar);
-        setCalendarGridAdapter(calendarAdapter);
-    }
-
-    public void fillCalendarGrid() {
-        ArrayList<Date> cells = generateCellsForCalendarGrid(this.calendarToday, numberOfDaysToShow);
-        CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), cells, eventDates, this.preservedCalender);
         setCalendarGridAdapter(calendarAdapter);
     }
 

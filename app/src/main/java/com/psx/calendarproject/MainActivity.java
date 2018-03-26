@@ -5,6 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.psx.enhancedcalendar.FlipperCalendar;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+
 public class MainActivity extends AppCompatActivity {
 
     //CustomCalendarView customCalendarView;
@@ -14,5 +18,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         flipperCalendar = findViewById(R.id.flip_cal);
+        HashSet<Date> dates = new HashSet<>();
+        dates.add(Calendar.getInstance().getTime());
+        flipperCalendar.setSpecialDays(dates);
+        flipperCalendar.displayCalendars();
     }
 }

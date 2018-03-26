@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class CalendarUtilities {
 
     private static final String TAG = CalendarUtilities.class.getSimpleName();
-    public static HashMap MAP_DATE_PATTERN_TO_INTEGER = new HashMap<Integer,String>() {{
+    static HashMap MAP_DATE_PATTERN_TO_INTEGER = new HashMap<Integer,String>() {{
         put(1, "MMM, yyyy");
         put(2, "dd/MM/yyyy");
     }};
@@ -40,7 +40,7 @@ public class CalendarUtilities {
         return  year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
     }
 
-    public static boolean areDatesSame (Date date1, Date date2) {
+    static boolean areDatesSame(Date date1, Date date2) {
         Calendar calendar1 = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
         calendar1.setTime(date1);
@@ -54,13 +54,13 @@ public class CalendarUtilities {
         return true;
     }
 
-    public static boolean dateBelongsToCurrentMonthAndYear (Date date, Calendar calendarCurrentMonthAndYear) {
+    static boolean dateBelongsToCurrentMonthAndYear(Date date, Calendar calendarCurrentMonthAndYear) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendarCurrentMonthAndYear.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && calendarCurrentMonthAndYear.get(Calendar.YEAR) == calendar.get(Calendar.YEAR);
     }
 
-    public static ArrayList<Date> generateCellsForCalendarGrid (Calendar calendar, int numberOfDaysToShow) {
+    static ArrayList<Date> generateCellsForCalendarGrid(Calendar calendar, int numberOfDaysToShow) {
         ArrayList<Date> cells = new ArrayList<>();
         calendar.set(Calendar.DAY_OF_MONTH,1);
         // TODO : Use this to allow user to change the Beginning of week from sunday to monday

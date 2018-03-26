@@ -63,9 +63,7 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
 
     public CustomCalendarView(Context context, AttributeSet attributeSet, Calendar calendar) {
         this(context, attributeSet);
-        Log.d("CALENDARVIEW", "Calendar recieved is " + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR));
         this.calendarToday = (Calendar) calendar.clone();
-        Log.d("CALENDARVIEW", "Calendar set is " + this.calendarToday.get(Calendar.MONTH) + "/" + this.calendarToday.get(Calendar.YEAR));
         this.preservedCalender = calendar;
         initView(context, attributeSet);
     }
@@ -76,7 +74,6 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
             inflatedView = layoutInflater.inflate(R.layout.custom_calendar, this);
         } else {
             Toast.makeText(context, "There seems to be some problem. Unable to inflate View.", Toast.LENGTH_LONG).show();
-            Log.e(TAG, "Cannot get a reference to Layout Inflater");
             inflatedView = null;
         }
         findAllViews(inflatedView);
@@ -85,10 +82,7 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
             applyLoadedPreferences();
         }
         currentDateTop = calendarToday.getTime();
-        Log.d(TAG + "Curr", "Time for this month is " + calendarToday.getTime());
         setCurrentDate(currentDateTop);
-        Log.d("CALENDAR-ADAPTER", "passing calendar to grid " + this.preservedCalender.get(Calendar.MONTH) + "/" + this.preservedCalender.get(Calendar.YEAR));
-        //fillCalendarGrid(this.preservedCalender);
     }
 
     private void findAllViews(View view) {
@@ -149,18 +143,10 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
         imageViewPrevMonth.setImageDrawable(getContext().getResources().getDrawable(prevMonthImage));
     }
 
-    public void fillCalendarGrid(Calendar calendar) {
+    public void fillCalendarGrid(Calendar calendar, HashSet<Date> eventDates) {
         Calendar calendar1 = (Calendar) calendar.clone();
         ArrayList<Date> cells = generateCellsForCalendarGrid(calendar1, numberOfDaysToShow);
         CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), cells, eventDates, calendar);
-        setCalendarGridAdapter(calendarAdapter);
-    }
-
-    public void fillCalendarGrid() {
-        ArrayList<Date> cells = generateCellsForCalendarGrid(this.calendarToday, numberOfDaysToShow);
-        Log.d(TAG + "fill", "Calendar Today " + this.calendarToday.get(Calendar.MONTH) + "/" + this.calendarToday.get(Calendar.YEAR));
-        Log.d(TAG + "fill", "Preserved Calendar" + this.preservedCalender.get(Calendar.MONTH) + "/" + this.preservedCalender.get(Calendar.YEAR));
-        CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), cells, eventDates, this.preservedCalender);
         setCalendarGridAdapter(calendarAdapter);
     }
 

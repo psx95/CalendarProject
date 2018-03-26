@@ -33,7 +33,7 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
     private LayoutInflater layoutInflater;
     private Calendar calendar;
 
-    public CalendarAdapter (Context context,ArrayList<Date> allDates, HashSet<Date> specialDateList, Calendar calendar) {
+    CalendarAdapter(Context context, ArrayList<Date> allDates, HashSet<Date> specialDateList, Calendar calendar) {
         super(context, R.layout.cutsom_calendar_day, allDates);
         this.allDates = allDates;
         this.specialDateList = specialDateList;

@@ -61,4 +61,10 @@ public class CalendarFlipAdapter extends BaseAdapter {
     public CalendarFlipAdapter getCurrentCalendarFlipAdapter() {
         return this;
     }
+
+    public void updateSpecialDaysList (HashSet<Date> updatedList) {
+        Log.d(TAG,"Inside update function");
+        eventDays.addAll(updatedList);
+        notifyDataSetChanged();
+    }
 }

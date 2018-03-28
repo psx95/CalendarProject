@@ -28,8 +28,8 @@ import java.util.HashSet;
 public class FlipperCalendar extends LinearLayout {
 
     private static final String TAG = FlipperCalendar.class.getSimpleName();
-    private static final int SWIPE_MIN_DISTANCE = 80;
-    private static final int SWIPE_THRESHOLD_VELOCITY = 150;
+    public static final int SWIPE_MIN_DISTANCE = 80;
+    public static final int SWIPE_THRESHOLD_VELOCITY = 150;
     private LayoutInflater layoutInflater;
     private View inflatedView;
     private AdapterViewFlipper adapterViewFlipper;

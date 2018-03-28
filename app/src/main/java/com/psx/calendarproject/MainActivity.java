@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         flipperCalendar.setMonthUpdateListner(new MonthUpdateCallback() {
             @Override
             public void onMonthUpdate() {
+                Log.d(TAG,"Month Update listener called");
                 Calendar calendar = (Calendar) flipperCalendar.getCurrentMonthCalendar().clone();
                 calendar.set(Calendar.DATE,Calendar.getInstance().get(Calendar.DATE));
                 calendar.set(Calendar.MONTH,flipperCalendar.getCurrentMonthCalendar().get(Calendar.MONTH));

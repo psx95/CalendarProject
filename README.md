@@ -1,2 +1,2 @@
 # CalendarProject
-A Custom Calendar that allows complete customization. Currently being developed as a part of an app, will be released as a separate library.
+A Calendar Library developed with the aim of complete customisation. 

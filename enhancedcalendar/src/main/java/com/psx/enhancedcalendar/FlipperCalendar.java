@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterViewFlipper;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,8 +29,8 @@ import java.util.HashSet;
 public class FlipperCalendar extends LinearLayout {
 
     private static final String TAG = FlipperCalendar.class.getSimpleName();
-    public static final int SWIPE_MIN_DISTANCE = 80;
-    public static final int SWIPE_THRESHOLD_VELOCITY = 150;
+    public static int SWIPE_MIN_DISTANCE = 80;
+    public static int SWIPE_THRESHOLD_VELOCITY = 150;
     private LayoutInflater layoutInflater;
     private View inflatedView;
     private AdapterViewFlipper adapterViewFlipper;
@@ -40,7 +41,7 @@ public class FlipperCalendar extends LinearLayout {
     private ArrayList<Calendar> calendarInstances = new ArrayList<>();
     private HashSet<Date> specialDays = new HashSet<>();
     private MonthUpdateCallback monthUpdateListner = null;
-
+    private UserInputCallback userInputListener = null;
     ArrayList<CustomCalendarView> customCalendarViews;
 
     //attributes from XML
@@ -83,8 +84,19 @@ public class FlipperCalendar extends LinearLayout {
         initView(context, attrs);
     }
     
-    private void initView(Context context, @Nullable AttributeSet attributeSet) {
+    private void initView(final Context context, @Nullable AttributeSet attributeSet) {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        userInputListener = new UserInputCallback() {
+            @Override
+            public void onDateLongPress(Date date) {
+                super.onDateLongPress(date);
+            }
+
+            @Override
+            public void onDatePress(Date date) {
+                super.onDatePress(date);
+            }
+        };
         if (layoutInflater != null)
             inflatedView = layoutInflater.inflate(R.layout.flipper_calendar, this);
         adapterViewFlipper = inflatedView.findViewById(R.id.calendarFlipper);
@@ -107,7 +119,7 @@ public class FlipperCalendar extends LinearLayout {
     }
 
     public void displayCalendars () {
-        calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews,specialDays);
+        calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews,specialDays, userInputListener);
         adapterViewFlipper.setAdapter(calendarFlipAdapter);
         adapterViewFlipper.setDisplayedChild(1);
     }
@@ -200,13 +212,12 @@ public class FlipperCalendar extends LinearLayout {
                 calendar.add(Calendar.MONTH, amount);
             }
             specialDays = getSpecialDays();
-            calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews,specialDays);
+            calendarFlipAdapter = new CalendarFlipAdapter(calendarInstances,customCalendarViews,specialDays,userInputListener);
             Log.d(TAG,"if Special days size" +specialDays);
             adapterViewFlipper.setAdapter(calendarFlipAdapter);
             adapterViewFlipper.setDisplayedChild(1);
         } else {
             Log.d(TAG,"else Special days size" +specialDays);
-           // ((CalendarFlipAdapter)adapterViewFlipper.getAdapter()).notifyDataSetChanged();
         }
     }
 
@@ -220,6 +231,30 @@ public class FlipperCalendar extends LinearLayout {
 
     public HashSet<Date> getSpecialDays() {
         return this.specialDays;
+    }
+
+    public void updateSpecialDays (HashSet<Date> updatedSpecialDays) {
+        setSpecialDays(new HashSet<Date>(updatedSpecialDays));
+    }
+
+    public void appendSpecialDays (HashSet<Date> extraSpecialDays){
+        HashSet<Date> dates = getSpecialDays();
+        dates.addAll(extraSpecialDays);
+        setSpecialDays(dates);
+    }
+
+    public void removeFromSpecialDay (Date d) {
+        HashSet<Date> dates = getSpecialDays();
+        dates.remove(d);
+        setSpecialDays(dates);
+    }
+
+    public void setUserInputListener(UserInputCallback userInputListener) {
+        this.userInputListener = userInputListener;
+    }
+
+    public UserInputCallback getUserInputListener () {
+        return userInputListener;
     }
 
     public void setSpecialDays(HashSet<Date> specialDays) {

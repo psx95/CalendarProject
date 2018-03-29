@@ -1,6 +1,5 @@
 package com.psx.enhancedcalendar;
 
-import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +21,13 @@ public class CalendarFlipAdapter extends BaseAdapter {
     private ArrayList<CustomCalendarView> customCalendarViews;
     private static int currPosition = 1;
     private HashSet<Date> eventDays;
+    private UserInputCallback userInputListener;
 
-    CalendarFlipAdapter(ArrayList<Calendar> calendars, ArrayList<CustomCalendarView> calendarViews, HashSet<Date> eventDates) {
+    CalendarFlipAdapter(ArrayList<Calendar> calendars, ArrayList<CustomCalendarView> calendarViews, HashSet<Date> eventDates, UserInputCallback userInputListener) {
         this.calendars = calendars;
         this.customCalendarViews = calendarViews;
         this.eventDays = eventDates;
+        this.userInputListener = userInputListener;
     }
 
     @Override
@@ -50,6 +51,7 @@ public class CalendarFlipAdapter extends BaseAdapter {
         CustomCalendarView customCalendarView = customCalendarViews.get(position);
         customCalendarView.setCalendars(calendars.get(position));
         customCalendarView.fillCalendarGrid(calendars.get(position),eventDays);
+        customCalendarView.getCalendarAdapter().setEventHandler(userInputListener);
         customCalendarView.setCurrentDate(calendars.get(position).getTime());
         return customCalendarView;
     }

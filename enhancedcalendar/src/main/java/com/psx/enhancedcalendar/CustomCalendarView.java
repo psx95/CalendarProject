@@ -53,6 +53,8 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
     private ImageButton imageViewNextMonth, imageViewPrevMonth;
     private TextView currentDate;
     private View inflatedView;
+    private Context flipperCalendarContext;
+    private CalendarAdapter calendarAdapter;
     private static UserInputCallback callbackListener;
 
     private GridView calendarGrid;
@@ -65,10 +67,12 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
         this(context, attributeSet);
         this.calendarToday = (Calendar) calendar.clone();
         this.preservedCalender = calendar;
+        this.flipperCalendarContext = context;
         initView(context, attributeSet);
     }
 
     private void initView(Context context, @Nullable AttributeSet attributeSet) {
+        this.flipperCalendarContext = context;
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (layoutInflater != null) {
             inflatedView = layoutInflater.inflate(R.layout.custom_calendar, this);
@@ -146,12 +150,17 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
     public void fillCalendarGrid(Calendar calendar, HashSet<Date> eventDates) {
         Calendar calendar1 = (Calendar) calendar.clone();
         ArrayList<Date> cells = generateCellsForCalendarGrid(calendar1, numberOfDaysToShow);
-        CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), cells, eventDates, calendar);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(this.flipperCalendarContext, cells, eventDates, calendar);
+        this.calendarAdapter = calendarAdapter;
         setCalendarGridAdapter(calendarAdapter);
     }
 
     public void setCalendarGridAdapter(CalendarAdapter calendarGridAdapter) {
         calendarGrid.setAdapter(calendarGridAdapter);
+    }
+
+    public CalendarAdapter getCalendarAdapter (){
+        return this.calendarAdapter;
     }
 
     public Date getCurrentDateTop() {

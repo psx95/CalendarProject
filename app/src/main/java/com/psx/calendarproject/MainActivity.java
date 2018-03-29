@@ -3,9 +3,11 @@ package com.psx.calendarproject;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.psx.enhancedcalendar.FlipperCalendar;
 import com.psx.enhancedcalendar.MonthUpdateCallback;
+import com.psx.enhancedcalendar.UserInputCallback;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -39,6 +41,19 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG,"Current month Calendr is for month "+flipperCalendar.getCurrentMonthCalendar().get(Calendar.MONTH));
                 Log.d(TAG,"Special days are "+dates1);
                 flipperCalendar.getCalendarFlipAdapter().notifyDataSetChanged();
+            }
+        });
+        flipperCalendar.setUserInputListener(new UserInputCallback() {
+            @Override
+            public void onDateLongPress(Date date) {
+                super.onDateLongPress(date);
+                Toast.makeText(getApplicationContext(),"DATE Long pressed "+date,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onDatePress(Date date) {
+                super.onDatePress(date);
+                Toast.makeText(getApplicationContext(),"Date pressed "+date,Toast.LENGTH_SHORT).show();
             }
         });
         flipperCalendar.displayCalendars();

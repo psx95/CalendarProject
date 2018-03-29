@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.psx.enhancedcalendar.R;
 
@@ -32,6 +34,7 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
     private ArrayList<Date> allDates = new ArrayList<>();
     private LayoutInflater layoutInflater;
     private Calendar calendar;
+    private UserInputCallback eventHandler;
 
     CalendarAdapter(Context context, ArrayList<Date> allDates, HashSet<Date> specialDateList, Calendar calendar) {
         super(context, R.layout.cutsom_calendar_day, allDates);
@@ -65,13 +68,36 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Date date = getItem(position);
+        final Date date = getItem(position);
         // used for highlighting the current date
         Date today = Calendar.getInstance().getTime();
         TextView textViewDate = null;
+        LinearLayout linearLayout_container;
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.cutsom_calendar_day, parent, false);
             textViewDate = convertView.findViewById(R.id.date_display);
+            linearLayout_container = convertView.findViewById(R.id.date_display_container);
+            linearLayout_container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getEventHandler() == null){
+                        Toast.makeText(getContext(),"NULL",Toast.LENGTH_SHORT).show();
+                    } else {
+                        getEventHandler().onDatePress(date);
+                    }
+                }
+            });
+            linearLayout_container.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (getEventHandler() == null){
+                        Toast.makeText(getContext(),"NULL",Toast.LENGTH_SHORT).show();
+                    } else {
+                        getEventHandler().onDateLongPress(date);
+                    }
+                    return true;
+                }
+            });
         }
         if (specialDateList != null) {
             for (Date d : specialDateList) {
@@ -108,5 +134,13 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
 
     private void addEffectsToDate(View convertView) {
         convertView.setBackgroundResource(R.drawable.ic_autorenew_pink_24dp);
+    }
+
+    public void setEventHandler (UserInputCallback eventHandler) {
+        this.eventHandler = eventHandler;
+    }
+
+    public UserInputCallback getEventHandler () {
+        return eventHandler;
     }
 }

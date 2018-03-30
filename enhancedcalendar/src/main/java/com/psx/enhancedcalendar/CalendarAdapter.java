@@ -1,6 +1,7 @@
 package com.psx.enhancedcalendar;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Layout;
@@ -38,8 +39,9 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
     private UserInputCallback eventHandler;
     private String specialDayDecorator;
     private int specialDayMarkerImage, specialDayBackground;
+    private ColorStateList highlightColor;
 
-    CalendarAdapter(Context context, ArrayList<Date> allDates, HashSet<Date> specialDateList, Calendar calendar, String specialDayDecorator, int specialDayMarkerImage, int specialDayBackground) {
+    CalendarAdapter(Context context, ArrayList<Date> allDates, HashSet<Date> specialDateList, Calendar calendar, String specialDayDecorator, int specialDayMarkerImage, int specialDayBackground, ColorStateList highlightColor) {
         super(context, R.layout.cutsom_calendar_day, allDates);
         this.allDates = allDates;
         this.specialDateList = specialDateList;
@@ -49,6 +51,7 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
         this.specialDayBackground = specialDayBackground;
         this.specialDayDecorator = specialDayDecorator;
         this.specialDayMarkerImage = specialDayMarkerImage;
+        this.highlightColor = highlightColor;
     }
 
     public CalendarAdapter(@NonNull Context context, int resource, int textViewResourceId, @NonNull Date[] objects) {
@@ -107,7 +110,7 @@ public class CalendarAdapter extends ArrayAdapter<Date> {
         }
         // highlight current date
         if (textViewDate!=null && CalendarUtilities.areDatesSame(date,today)) {
-            textViewDate.setTextColor(convertView.getContext().getResources().getColor(R.color.colorPrimaryDark));
+            textViewDate.setTextColor(highlightColor);
         }
         Calendar calendarDate = (Calendar) calendar.clone();
         calendarDate.setTime(date);

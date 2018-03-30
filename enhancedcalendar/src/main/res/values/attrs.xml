@@ -9,7 +9,7 @@
         <attr name="nextMonthImage" format="reference" />
         <attr name="prevMonthImage" format="reference" />
         <attr name="showSeasonalColorsOnMonths" format="boolean" />
-        <attr name="currDateColor" format="reference" />
+        <attr name="currTopDateColor" format="reference" />
         <attr name="scrollEnabled" format="boolean" />
         <attr name="animateChange" format="boolean" />
         <attr name="animLeftIn" format="reference" />
@@ -23,5 +23,6 @@
             <enum name="markerImager" value="2" />
             <enum name="both" value="3" />
         </attr>
+        <attr name="currDateHighlightColor" format="reference" />
     </declare-styleable>
 </resources>

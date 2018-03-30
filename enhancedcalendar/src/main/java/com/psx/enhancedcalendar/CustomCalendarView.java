@@ -45,7 +45,7 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
     private String dateDisplayFormat = "MMM yyyy";
     private boolean showSeasonalColorsOnMonths = false;
     private int nextMonthImage, prevMonthImage;
-    private ColorStateList currDateColor;
+    private ColorStateList currTopDateColor,currDateHighlightColor;
     private boolean scrollEnabled = false;
     private int specialDayBackgroundId;
     private int specialDayMarkerImage;
@@ -112,11 +112,18 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
             showSeasonalColorsOnMonths = typedArray.getBoolean(R.styleable.FlipperCalendar_showSeasonalColorsOnMonths, false);
             nextMonthImage = typedArray.getResourceId(R.styleable.FlipperCalendar_nextMonthImage, R.drawable.ic_arrow_right_black_30dp);
             prevMonthImage = typedArray.getResourceId(R.styleable.FlipperCalendar_prevMonthImage, R.drawable.ic_arrow_left_black_30dp);
-            currDateColor = typedArray.getColorStateList(R.styleable.FlipperCalendar_currDateColor);
+            if (typedArray.hasValue(R.styleable.FlipperCalendar_currTopDateColor))
+                currTopDateColor = typedArray.getColorStateList(R.styleable.FlipperCalendar_currTopDateColor);
+            else
+                currTopDateColor = getResources().getColorStateList(R.color.colorAccent);
             scrollEnabled = typedArray.getBoolean(R.styleable.FlipperCalendar_scrollEnabled, false);
             specialDayBackgroundId = typedArray.getResourceId(R.styleable.FlipperCalendar_specialDayBackground, R.drawable.ic_autorenew_pink_24dp);
             specialDayMarkerImage = typedArray.getResourceId(R.styleable.FlipperCalendar_specialDayMarkerImage, R.drawable.ic_star_blue_24dp);
             specialDayDecorator = typedArray.getString(R.styleable.FlipperCalendar_specialDayDecorator);
+            if (typedArray.hasValue(R.styleable.FlipperCalendar_currDateHighlightColor))
+                currDateHighlightColor = typedArray.getColorStateList(R.styleable.FlipperCalendar_currDateHighlightColor);
+            else
+                currDateHighlightColor = getResources().getColorStateList(R.color.colorPrimaryDark);
         } finally {
             typedArray.recycle();
         }
@@ -124,7 +131,7 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
 
     private void applyLoadedPreferences() {
         changeMonthControlImages();
-        changeCurrentDateColor(currDateColor);
+        changeCurrentDateColor(currTopDateColor);
         changeScrollMode(scrollEnabled);
     }
 
@@ -156,7 +163,7 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
     public void fillCalendarGrid(Calendar calendar, HashSet<Date> eventDates) {
         Calendar calendar1 = (Calendar) calendar.clone();
         ArrayList<Date> cells = generateCellsForCalendarGrid(calendar1, numberOfDaysToShow);
-        CalendarAdapter calendarAdapter = new CalendarAdapter(this.flipperCalendarContext, cells, eventDates, calendar,specialDayDecorator,specialDayMarkerImage,specialDayBackgroundId);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(this.flipperCalendarContext, cells, eventDates, calendar,specialDayDecorator,specialDayMarkerImage,specialDayBackgroundId,currDateHighlightColor);
         this.calendarAdapter = calendarAdapter;
         setCalendarGridAdapter(calendarAdapter);
     }

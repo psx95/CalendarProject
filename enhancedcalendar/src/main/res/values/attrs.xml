@@ -16,5 +16,12 @@
         <attr name="animLeftOut" format="reference" />
         <attr name="animRightIn" format="reference" />
         <attr name="animRightOut" format="reference" />
+        <attr name="specialDayBackground" format="reference" />
+        <attr name="specialDayMarkerImage" format="reference" />
+        <attr name="specialDayDecorator">
+            <enum name="background" value="1" />
+            <enum name="markerImager" value="2" />
+            <enum name="both" value="3" />
+        </attr>
     </declare-styleable>
 </resources>

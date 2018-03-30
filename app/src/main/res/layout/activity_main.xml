@@ -20,6 +20,9 @@
         app:animLeftOut="@animator/left_out"
         app:animRightIn="@animator/right_in"
         app:animRightOut="@animator/right_out"
+        app:specialDayDecorator="both"
+        app:specialDayBackground="@color/colorAccent"
+        app:specialDayMarkerImage="@drawable/ic_launcher_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

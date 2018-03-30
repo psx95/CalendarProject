@@ -47,12 +47,17 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
     private int nextMonthImage, prevMonthImage;
     private ColorStateList currDateColor;
     private boolean scrollEnabled = false;
+    private int specialDayBackgroundId;
+    private int specialDayMarkerImage;
+    private String specialDayDecorator;
 
     //fields in the custom View
     private LinearLayout calendarTopBar, weekDaysContainer, gridViewContainer;
     private ImageButton imageViewNextMonth, imageViewPrevMonth;
     private TextView currentDate;
     private View inflatedView;
+    private Context flipperCalendarContext;
+    private CalendarAdapter calendarAdapter;
     private static UserInputCallback callbackListener;
 
     private GridView calendarGrid;
@@ -65,10 +70,12 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
         this(context, attributeSet);
         this.calendarToday = (Calendar) calendar.clone();
         this.preservedCalender = calendar;
+        this.flipperCalendarContext = context;
         initView(context, attributeSet);
     }
 
     private void initView(Context context, @Nullable AttributeSet attributeSet) {
+        this.flipperCalendarContext = context;
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (layoutInflater != null) {
             inflatedView = layoutInflater.inflate(R.layout.custom_calendar, this);
@@ -107,6 +114,9 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
             prevMonthImage = typedArray.getResourceId(R.styleable.FlipperCalendar_prevMonthImage, R.drawable.ic_arrow_left_black_30dp);
             currDateColor = typedArray.getColorStateList(R.styleable.FlipperCalendar_currDateColor);
             scrollEnabled = typedArray.getBoolean(R.styleable.FlipperCalendar_scrollEnabled, false);
+            specialDayBackgroundId = typedArray.getResourceId(R.styleable.FlipperCalendar_specialDayBackground, R.drawable.ic_autorenew_pink_24dp);
+            specialDayMarkerImage = typedArray.getResourceId(R.styleable.FlipperCalendar_specialDayMarkerImage, R.drawable.ic_star_blue_24dp);
+            specialDayDecorator = typedArray.getString(R.styleable.FlipperCalendar_specialDayDecorator);
         } finally {
             typedArray.recycle();
         }
@@ -146,12 +156,17 @@ public class CustomCalendarView extends LinearLayout implements View.OnClickList
     public void fillCalendarGrid(Calendar calendar, HashSet<Date> eventDates) {
         Calendar calendar1 = (Calendar) calendar.clone();
         ArrayList<Date> cells = generateCellsForCalendarGrid(calendar1, numberOfDaysToShow);
-        CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), cells, eventDates, calendar);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(this.flipperCalendarContext, cells, eventDates, calendar,specialDayDecorator,specialDayMarkerImage,specialDayBackgroundId);
+        this.calendarAdapter = calendarAdapter;
         setCalendarGridAdapter(calendarAdapter);
     }
 
     public void setCalendarGridAdapter(CalendarAdapter calendarGridAdapter) {
         calendarGrid.setAdapter(calendarGridAdapter);
+    }
+
+    public CalendarAdapter getCalendarAdapter (){
+        return this.calendarAdapter;
     }
 
     public Date getCurrentDateTop() {

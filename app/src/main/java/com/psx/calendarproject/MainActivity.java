@@ -25,13 +25,17 @@ public class MainActivity extends AppCompatActivity {
         flipperCalendar = findViewById(R.id.flip_cal);
         HashSet<Date> dates = new HashSet<>();
         dates.add(Calendar.getInstance().getTime());
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH,9);
+        calendar.set(Calendar.DATE,1);
+        dates.add(calendar.getTime());
         Log.d(TAG,"On Create Current month Calendr is for month "+flipperCalendar.getCurrentMonthCalendar().get(Calendar.MONTH));
         flipperCalendar.setSpecialDays(dates);
         flipperCalendar.setMonthUpdateListner(new MonthUpdateCallback() {
             @Override
             public void onMonthUpdate() {
                 Log.d(TAG,"Month Update listener called");
-                Calendar calendar = (Calendar) flipperCalendar.getCurrentMonthCalendar().clone();
+                /*Calendar calendar = (Calendar) flipperCalendar.getCurrentMonthCalendar().clone();
                 calendar.set(Calendar.DATE,Calendar.getInstance().get(Calendar.DATE));
                 calendar.set(Calendar.MONTH,flipperCalendar.getCurrentMonthCalendar().get(Calendar.MONTH));
                 Date date = calendar.getTime();
@@ -40,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 flipperCalendar.setSpecialDays(dates1);
                 Log.d(TAG,"Current month Calendr is for month "+flipperCalendar.getCurrentMonthCalendar().get(Calendar.MONTH));
                 Log.d(TAG,"Special days are "+dates1);
-                flipperCalendar.getCalendarFlipAdapter().notifyDataSetChanged();
+                flipperCalendar.getCalendarFlipAdapter().notifyDataSetChanged();*/
             }
         });
         flipperCalendar.setUserInputListener(new UserInputCallback() {
